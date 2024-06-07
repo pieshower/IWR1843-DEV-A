@@ -12,3 +12,4 @@ add_executable(main source/main.cpp)
 
 # Link the standard C++ library
 target_link_libraries(main stdc++)
+
