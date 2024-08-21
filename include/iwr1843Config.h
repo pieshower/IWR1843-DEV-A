@@ -36,6 +36,6 @@ const char* iwr1843ConfigCommands[] = {
     "sensorStart"
 };
 
-unsigned long ConfigCommandSize = sizeof(iwr1843ConfigCommands) / sizeof(iwr1843ConfigCommands[0]);
+unsigned long configCommandsSize = sizeof(iwr1843ConfigCommands) / sizeof(iwr1843ConfigCommands[0]);
 
 #endif
