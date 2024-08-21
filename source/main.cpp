@@ -45,12 +45,10 @@ int main()
         for (unsigned long i = 0; i < configCommandsSize; i++) {
             string command = string(iwr1843ConfigCommands[i]) + "\r\n";
             userPort.write(command);
-            cout << command << endl;
-            usleep(100000);
+            usleep(10000);
         }
+        cout << "Configuration done! Starting.." << endl;
     }
-
-    cout << "done!" << endl;
 
     while (true);
 
