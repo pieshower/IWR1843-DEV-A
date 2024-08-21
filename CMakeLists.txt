@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 3.10)
+project(Joe)
 
-# Set the project name
-project(HelloWorld)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set the C++ standard
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+find_package(PCL 1.8 REQUIRED)
 
-# Add an executable
-add_executable(main source/main.cpp)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
 
-# Link the standard C++ library
-target_link_libraries(main stdc++)
+find_package(serial REQUIRED)
+include_directories(${serial_INCLUDE_DIRS})
 
+add_executable(joe 
+    source/main.cpp
+)
+
+target_link_libraries(joe ${PCL_LIBRARIES} ${serial_LIBRARIES})

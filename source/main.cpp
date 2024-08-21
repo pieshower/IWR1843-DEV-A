@@ -42,13 +42,17 @@ int main()
     }
 
     if (!userPort_error) {
-        for (uint8_t i = 0; i < configCommandsSize; i++) {
-            string command = iwr1843ConfigCommands[i] + "\r\n";
+        for (unsigned long i = 0; i < configCommandsSize; i++) {
+            string command = string(iwr1843ConfigCommands[i]) + "\r\n";
             userPort.write(command);
-            usleep(10000);
+            cout << command << endl;
+            usleep(100000);
         }
     }
 
+    cout << "done!" << endl;
+
+    while (true);
 
     return 0;
 }
