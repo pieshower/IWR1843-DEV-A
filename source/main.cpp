@@ -16,8 +16,7 @@ int dataPort_baud = 921600;
 bool userPort_error = false;
 bool dataPort_error = false;
 
-int main()
-{
+int main() {
     Serial userPort;
     Serial dataPort;
 
@@ -50,7 +49,9 @@ int main()
         cout << "Configuration done! Starting.." << endl;
     }
 
-    while (true);
+    while (!dataPort_error) {
+        
+    }
 
     return 0;
 }

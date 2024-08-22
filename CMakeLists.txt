@@ -12,8 +12,10 @@ link_directories(${PCL_LIBRARY_DIRS})
 find_package(serial REQUIRED)
 include_directories(${serial_INCLUDE_DIRS})
 
-add_executable(joe 
+add_executable(
+    joe #EXE Name
     source/main.cpp
+    source/Radar.cpp
 )
 
 target_link_libraries(joe ${PCL_LIBRARIES} ${serial_LIBRARIES})
