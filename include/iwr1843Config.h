@@ -1,6 +1,7 @@
 #ifndef IWR1843CONFIG_H
 #define IWR1843CONFIG_H
 
+#include <iostream>
 
 const char* iwr1843ConfigCommands[] = {
     "configDataPort 921600 1",

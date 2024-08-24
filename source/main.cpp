@@ -2,56 +2,26 @@
 #include <serial/serial.h>
 #include <unistd.h>
 
-#include "../include/iwr1843Config.h"
+#include "../include/Radar.h"
 
-using namespace std;
-using namespace serial;
 
-string userPort_s = "/dev/ttyACM0";
-string dataPort_s = "/dev/ttyACM2";
+std::string userPort_s = "/dev/ttyACM0";
+std::string dataPort_s = "/dev/ttyACM2";
 
 int userPort_baud = 115200;
 int dataPort_baud = 921600;
 
-bool userPort_error = false;
-bool dataPort_error = false;
+
 
 int main() {
-    Serial userPort;
-    Serial dataPort;
 
-    try {
-        userPort.setPort(userPort_s);
-        userPort.setBaudrate(userPort_baud);
-        userPort.open();
-    } 
-    catch (serial::IOException &e) {
-        cerr << "unable to open user port" << endl;
-        userPort_error = true;
-    }
+    Radar myRadar(userPort_s, userPort_baud, dataPort_s, dataPort_baud);
 
-    try {
-        dataPort.setPort(dataPort_s);
-        dataPort.setBaudrate(dataPort_baud);
-        dataPort.open();
-    } 
-    catch (serial::IOException &e) {
-        cerr << "unable to open data port" << endl;
-        dataPort_error = true;
-    }
+    myRadar.start();
+    sleep(2);
 
-    if (!userPort_error) {
-        for (unsigned long i = 0; i < configCommandsSize; i++) {
-            string command = string(iwr1843ConfigCommands[i]) + "\r\n";
-            userPort.write(command);
-            usleep(10000);
-        }
-        cout << "Configuration done! Starting.." << endl;
-    }
 
-    while (!dataPort_error) {
-        
-    }
+    while (true);
 
     return 0;
 }
