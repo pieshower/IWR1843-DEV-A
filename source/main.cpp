@@ -20,8 +20,18 @@ int main() {
     myRadar.start();
     sleep(2);
 
+    while (true) {
+        std::string data = myRadar.read();
 
-    while (true);
+        std::cout << "data size: " << (int)data.size() << std::endl;
+        std::cout << "data:";
+        for (unsigned long i = 0; i < data.size(); i++) {
+            std::cout << " " << (uint)data[i];
+        }
+        std::cout << std::endl << std::endl;
+
+        sleep(2);
+    }
 
     return 0;
 }

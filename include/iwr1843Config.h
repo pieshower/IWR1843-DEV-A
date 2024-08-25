@@ -3,9 +3,12 @@
 
 #include <iostream>
 
+std::string sensorStart = "sensorStart";
+std::string sensorStop = "sensorStop";
+
 const char* iwr1843ConfigCommands[] = {
     "configDataPort 921600 1",
-    // sensorStop,
+    "sensorStop",
     "flushCfg",
     "dfeDataOutputMode 1",
     "channelCfg 15 7 0",
@@ -38,8 +41,5 @@ const char* iwr1843ConfigCommands[] = {
 };
 
 unsigned long configCommandsSize = sizeof(iwr1843ConfigCommands) / sizeof(iwr1843ConfigCommands[0]);
-
-std::string sensorStart = "sensorStart";
-std::string sensorStop = "sensorStop";
 
 #endif
