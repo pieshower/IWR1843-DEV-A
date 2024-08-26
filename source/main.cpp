@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <serial/serial.h>
 #include <unistd.h>
 
@@ -21,12 +22,12 @@ int main() {
     sleep(2);
 
     while (true) {
-        std::string data = myRadar.read();
+        std::vector<uint16_t> data = myRadar.read();
 
         std::cout << "data size: " << (int)data.size() << std::endl;
         std::cout << "data:";
         for (unsigned long i = 0; i < data.size(); i++) {
-            std::cout << " " << (uint)data[i];
+            std::cout << " " << std::hex << std::setw(4) << std::setfill('0') << data[i];
         }
         std::cout << std::endl << std::endl;
 
