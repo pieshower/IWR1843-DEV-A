@@ -3,20 +3,30 @@
 #include "../include/iwr1843Config.h"
 
 Radar::Radar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_) {
+    userBaud = userBaud_;
+    userPort_s = userPort_s_;
+    dataBaud = dataBaud_;
+    dataPort_s = dataPort_s_;
+}
+
+Radar::~Radar() {
+    delete this;
+}
+
+void Radar::connectPort() {
     try {
-        userPort.setPort(userPort_s_);
-        userPort.setBaudrate(userBaud_);
+        userPort.setPort(userPort_s);
+        userPort.setBaudrate(userBaud);
         userPort.open();
     } 
     catch (serial::IOException &e) {
         std::cerr << "unable to open user port" << std::endl;
         userPort_error = true;
-
     }
 
     try {
-        dataPort.setPort(dataPort_s_);
-        dataPort.setBaudrate(dataBaud_);
+        dataPort.setPort(dataPort_s);
+        dataPort.setBaudrate(dataBaud);
         dataPort.open();
     } 
     catch (serial::IOException &e) {
@@ -25,14 +35,16 @@ Radar::Radar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, in
     }
 }
 
-Radar::~Radar() {
-    delete this;
-}
-
 void Radar::configure() {
     if (!userPort_error) {
+        std::string command = configDataPort + "\r\n";
+        userPort.write(command);
+        usleep(10000);
+        command = sensorStop + "\r\n";
+        dataPort.write(command);
+        usleep(10000);
         for (unsigned long i = 0; i < configCommandsSize; i++) {
-            std::string command = std::string(iwr1843ConfigCommands[i]) + "\r\n";
+            command = std::string(iwr1843ConfigCommands[i]) + "\r\n";
             userPort.write(command);
             usleep(10000);
         }
@@ -70,7 +82,7 @@ std::vector<uint16_t> Radar::read() {
         buf_s.push_back(' ');
     }
 
-    for (auto i = 1; i < buf_s.size(); i += 2) {
+    for (std::size_t i = 1; i < buf_s.size(); i += 2) {
         uint16_t word = (static_cast<uint8_t>(buf_s[i]) << 8) | static_cast<uint8_t>(buf_s[i - 1]);
         data.push_back(word);
     }
