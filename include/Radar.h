@@ -21,7 +21,7 @@ private:
     bool userPort_error = false;
     bool dataPort_error = false;
 
-    void configure();
+    void configure(const char* configCommands[], const unsigned long configSize);
 
 public:
 

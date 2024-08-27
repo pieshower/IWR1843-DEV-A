@@ -38,6 +38,6 @@ const char* iwr1843ConfigCommands[] = {
     "calibData 0 0 0"
 };
 
-unsigned long configCommandsSize = sizeof(iwr1843ConfigCommands) / sizeof(iwr1843ConfigCommands[0]);
+const unsigned long configCommandsSize = sizeof(iwr1843ConfigCommands) / sizeof(iwr1843ConfigCommands[0]);
 
 #endif

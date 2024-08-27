@@ -35,7 +35,7 @@ void Radar::connectPort() {
     }
 }
 
-void Radar::configure() {
+void Radar::configure(const char* configCommands[], const unsigned long configSize) {
     if (!userPort_error) {
         std::string command = configDataPort + "\r\n";
         userPort.write(command);
@@ -43,8 +43,8 @@ void Radar::configure() {
         command = sensorStop + "\r\n";
         dataPort.write(command);
         usleep(10000);
-        for (unsigned long i = 0; i < configCommandsSize; i++) {
-            command = std::string(iwr1843ConfigCommands[i]) + "\r\n";
+        for (unsigned long i = 0; i < configSize; i++) {
+            command = std::string(configCommands[i]) + "\r\n";
             userPort.write(command);
             usleep(10000);
         }
@@ -56,7 +56,7 @@ void Radar::configure() {
 }
 
 void Radar::start() {
-    configure();
+    configure(iwr1843ConfigCommands, configCommandsSize);
     std::string command = sensorStart + "\r\n";
     userPort.write(command);
     usleep(10000);
