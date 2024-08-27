@@ -23,7 +23,7 @@ int main() {
 
         std::vector<uint16_t> data = myRadar.read();
         std::cout << "data size: " << (int)data.size() << std::endl;
-        std::cout << "data:";
+        std::cout << "data:" << std::endl;
         for (auto i = 0; i < data.size(); i++) {
             std::cout << " " << std::hex << std::setw(4) << std::setfill('0') << data[i];
         }
