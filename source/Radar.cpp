@@ -1,3 +1,4 @@
+#include <iomanip>
 
 #include "../include/Radar.h"
 #include "../include/iwr1843Config.h"
@@ -70,22 +71,27 @@ void Radar::stop() {
     std::cout << "Stopping Radar..." << std::endl;
 }
 
-std::vector<uint16_t> Radar::read() {
+void Radar::read() {
     std::string buf_s;
-    std::vector<uint16_t> data;
+    std::vector<uint8_t> data;
 
     while (dataPort.available()) {
         buf_s += dataPort.read();
     }
 
-    if (buf_s.size() % 2 != 0) {
-        buf_s.push_back(' ');
+    // if (buf_s.size() % 2 != 0) {
+    //     buf_s.push_back(' ');
+    // }
+
+    for (std::size_t i = 0; i < buf_s.size(); i++) {
+        uint8_t byte = static_cast<uint8_t>(buf_s[i]);
+        data.push_back(byte);
     }
 
-    for (std::size_t i = 1; i < buf_s.size(); i += 2) {
-        uint16_t word = (static_cast<uint8_t>(buf_s[i]) << 8) | static_cast<uint8_t>(buf_s[i - 1]);
-        data.push_back(word);
+    std::cout << "data size: " << (int)data.size() << std::endl;
+    std::cout << "data:" << std::endl;
+    for (auto i = 0; i < data.size(); i++) {
+        std::cout << " " << std::hex << std::setw(4) << std::setfill('0') << data[i];
     }
-
-    return data;
+    std::cout << std::endl << std::endl;
 }
