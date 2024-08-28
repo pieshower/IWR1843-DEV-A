@@ -6,7 +6,7 @@
 #include <serial/serial.h>
 
 typedef struct data_header_t {
-    uint16_t magicWord[4];
+    uint16_t magicWord[4] = {0x0102, 0x0304, 0x0506, 0x0708};
     uint32_t version;
     uint32_t totalPacketLen;
     uint32_t platform;
@@ -35,7 +35,7 @@ public:
     void connectPort();
     void start();
     void  stop();
-    void  read();
+    std::vector<uint8_t>  read();
 };
 
 #endif

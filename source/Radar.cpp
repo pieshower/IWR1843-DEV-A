@@ -1,4 +1,5 @@
 #include <iomanip>
+#include <boost/asio.hpp>
 
 #include "../include/Radar.h"
 #include "../include/iwr1843Config.h"
@@ -71,27 +72,42 @@ void Radar::stop() {
     std::cout << "Stopping Radar..." << std::endl;
 }
 
-void Radar::read() {
-    std::string buf_s;
-    std::vector<uint8_t> data;
+std::vector<uint8_t> Radar::read() {
+    
+    const uint8_t magicBytes[8] = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
+    const std::size_t magicBytesSize = sizeof(magicBytes);
 
-    while (dataPort.available()) {
-        buf_s += dataPort.read();
+    std::vector<uint8_t> buf;
+    std::vector<uint8_t> frame;
+
+    bool frameStarted = false;
+
+    while (true) {
+        uint8_t byte;
+
+        dataPort.read(&byte, 1);
+        buf.push_back(byte);
+
+        if (buf.size() > magicBytesSize) {
+            buf.erase(buf.begin());
+        }
+
+        if (buf.size() >= magicBytesSize) {
+            if (std::equal(buf.end() - magicBytesSize, buf.end(), magicBytes)) {
+                if (frameStarted) {
+                    // buf.erase(buf.end() - magicBytesSize, buf.end());
+                    // frame.resize(frame.size() - magicBytesSize);
+                    return frame;
+                }
+                else {
+                    frameStarted = true;
+                    frame.insert(frame.end(), buf.begin(), buf.end());
+                    buf.clear();
+                }
+            }
+            else if (frameStarted) {
+                frame.push_back(byte);
+            }
+        }
     }
-
-    // if (buf_s.size() % 2 != 0) {
-    //     buf_s.push_back(' ');
-    // }
-
-    for (std::size_t i = 0; i < buf_s.size(); i++) {
-        uint8_t byte = static_cast<uint8_t>(buf_s[i]);
-        data.push_back(byte);
-    }
-
-    std::cout << "data size: " << (int)data.size() << std::endl;
-    std::cout << "data:" << std::endl;
-    for (auto i = 0; i < data.size(); i++) {
-        std::cout << " " << std::hex << std::setw(4) << std::setfill('0') << data[i];
-    }
-    std::cout << std::endl << std::endl;
 }
