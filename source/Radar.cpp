@@ -88,15 +88,15 @@ std::vector<uint8_t> Radar::read() {
         dataPort.read(&byte, 1);
         buf.push_back(byte);
 
-        if (buf.size() > magicBytesSize) {
-            buf.erase(buf.begin());
-        }
+        // if (buf.size() > magicBytesSize) {
+        //     buf.erase(buf.begin());
+        // }
 
         if (buf.size() >= magicBytesSize) {
             if (std::equal(buf.end() - magicBytesSize, buf.end(), magicBytes)) {
                 if (frameStarted) {
                     // buf.erase(buf.end() - magicBytesSize, buf.end());
-                    // frame.resize(frame.size() - magicBytesSize);
+                    frame.resize(frame.size() - magicBytesSize);
                     return frame;
                 }
                 else {
