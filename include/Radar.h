@@ -15,7 +15,6 @@ typedef struct data_header_t {
     uint32_t numDetectedObj;
     uint32_t numTLVs;
     uint32_t subFrameNumber;
-
 } data_header_t;
 
 class Radar {
@@ -35,7 +34,7 @@ public:
     void connectPort();
     void start();
     void  stop();
-    std::vector<uint8_t>  read();
+    std::vector<uint8_t> read();
 };
 
 #endif

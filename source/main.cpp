@@ -6,8 +6,8 @@
 #include "../include/Radar.h"
 
 
-std::string userPort_s = "/dev/ttyACM0";
-std::string dataPort_s = "/dev/ttyACM1";
+std::string userPort_s = "/dev/ttyACM2";
+std::string dataPort_s = "/dev/ttyACM3";
 
 int userPort_baud = 115200;
 int dataPort_baud = 921600;

@@ -74,40 +74,45 @@ void Radar::stop() {
 
 std::vector<uint8_t> Radar::read() {
     
-    const uint8_t magicBytes[8] = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
-    const std::size_t magicBytesSize = sizeof(magicBytes);
+    const std::vector<uint8_t> magicBytes = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
 
     std::vector<uint8_t> buf;
     std::vector<uint8_t> frame;
 
-    bool frameStarted = false;
+    // bool frameStarted = false;
 
-    while (true) {
+    while (dataPort.available()) {
         uint8_t byte;
-
         dataPort.read(&byte, 1);
         buf.push_back(byte);
+    }
 
-        // if (buf.size() > magicBytesSize) {
-        //     buf.erase(buf.begin());
-        // }
 
-        if (buf.size() >= magicBytesSize) {
-            if (std::equal(buf.end() - magicBytesSize, buf.end(), magicBytes)) {
-                if (frameStarted) {
-                    // buf.erase(buf.end() - magicBytesSize, buf.end());
-                    frame.resize(frame.size() - magicBytesSize);
-                    return frame;
-                }
-                else {
-                    frameStarted = true;
-                    frame.insert(frame.end(), buf.begin(), buf.end());
-                    buf.clear();
-                }
-            }
-            else if (frameStarted) {
-                frame.push_back(byte);
-            }
+    // std::cout << "buf size: " << std::dec << (int)buf.size() << std::endl;
+    // std::cout << "buf data:" << std::endl;
+    // for (auto i = 0; i < buf.size(); i++) {
+    //     std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)buf[i];
+    // }
+    // std::cout << std::endl << std::endl;
+
+    size_t i = 0;
+
+    while (i <= buf.size() - magicBytes.size()) {
+        if (std::equal(magicBytes.begin(), magicBytes.end(), buf.begin() + i)) {
+            size_t frameStart = i;
+
+            uint32_t frameSize = (buf[i + 12]) | (buf[i + 13] << 8) | (buf[i + 14] << 16) | (buf[i + 15] << 24);
+
+            std::cout << "Extracted frame size: " << std::dec << frameSize << " bytes" << std::endl;
+
+            i += magicBytes.size() + frameSize;
+
+            frame.insert(frame.end(), buf.begin() + frameStart, buf.begin() + i);
+            frame.resize(frame.size() - magicBytes.size());
+            break;
+        } else {
+            i++;
         }
     }
+    return frame;
 }
