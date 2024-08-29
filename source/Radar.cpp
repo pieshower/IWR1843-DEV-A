@@ -73,42 +73,31 @@ void Radar::stop() {
 }
 
 std::vector<uint8_t> Radar::read() {
-    
     const std::vector<uint8_t> magicBytes = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
-
     std::vector<uint8_t> buf;
     std::vector<uint8_t> frame;
+    size_t i = 0;
 
-    // bool frameStarted = false;
-
-    while (dataPort.available()) {
+    while (dataPort.available() && buf.size() < MAX_BUFFER_SIZE) {
         uint8_t byte;
         dataPort.read(&byte, 1);
         buf.push_back(byte);
     }
 
-
-    // std::cout << "buf size: " << std::dec << (int)buf.size() << std::endl;
-    // std::cout << "buf data:" << std::endl;
-    // for (auto i = 0; i < buf.size(); i++) {
-    //     std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)buf[i];
-    // }
-    // std::cout << std::endl << std::endl;
-
-    size_t i = 0;
+    std::cout << "buf size: " << std::dec << (int)buf.size() << std::endl;
+    std::cout << "buf data:" << std::endl;
+    for (auto i = 0; i < buf.size(); i++) {
+        std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)buf[i];
+    }
+    std::cout << std::endl << std::endl;
 
     while (i <= buf.size() - magicBytes.size()) {
         if (std::equal(magicBytes.begin(), magicBytes.end(), buf.begin() + i)) {
             size_t frameStart = i;
-
-            uint32_t frameSize = (buf[i + 12]) | (buf[i + 13] << 8) | (buf[i + 14] << 16) | (buf[i + 15] << 24);
-
+            uint32_t frameSize = (buf[i + 15] << 24) | (buf[i + 14] << 16) | (buf[i + 13] << 8) | (buf[i + 12]);
             std::cout << "Extracted frame size: " << std::dec << frameSize << " bytes" << std::endl;
-
-            i += magicBytes.size() + frameSize;
-
+            i += frameSize;
             frame.insert(frame.end(), buf.begin() + frameStart, buf.begin() + i);
-            frame.resize(frame.size() - magicBytes.size());
             break;
         } else {
             i++;

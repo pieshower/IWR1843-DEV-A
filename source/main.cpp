@@ -29,7 +29,9 @@ int main() {
             std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)data[i];
         }
         std::cout << std::endl << std::endl;
-        sleep(2);
+
+        sleep(1);
+        // usleep(80000);
     }
 
     return 0;
