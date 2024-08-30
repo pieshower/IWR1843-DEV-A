@@ -3,7 +3,7 @@
 #include <serial/serial.h>
 #include <unistd.h>
 
-#include "../include/Radar.h"
+#include "../include/mmWaveRadar.h"
 
 
 std::string userPort_s = "/dev/ttyACM0";
@@ -14,14 +14,14 @@ int dataPort_baud = 921600;
 
 int main() {
 
-    Radar myRadar(userPort_s, userPort_baud, dataPort_s, dataPort_baud);
+    mmWaveRadar my_mmWaveRadar(userPort_s, userPort_baud, dataPort_s, dataPort_baud);
 
-    myRadar.connectPort();
-    myRadar.start();
+    my_mmWaveRadar.connectPort();
+    my_mmWaveRadar.start();
     sleep(2);
 
     while (true) {
-        std::vector<uint8_t> data = myRadar.read();
+        std::vector<uint8_t> data = my_mmWaveRadar.read();
 
         std::cout << "data size: " << std::dec << (int)data.size() << std::endl;
         std::cout << "data:" << std::endl;

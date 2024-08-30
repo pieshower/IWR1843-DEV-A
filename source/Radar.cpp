@@ -1,21 +1,21 @@
 #include <iomanip>
 #include <boost/asio.hpp>
 
-#include "../include/Radar.h"
+#include "../include/mmWaveRadar.h"
 #include "../include/iwr1843Config.h"
 
-Radar::Radar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_) {
+mmWaveRadar::mmWaveRadar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_) {
     userBaud = userBaud_;
     userPort_s = userPort_s_;
     dataBaud = dataBaud_;
     dataPort_s = dataPort_s_;
 }
 
-Radar::~Radar() {
+mmWaveRadar::~mmWaveRadar() {
     delete this;
 }
 
-void Radar::connectPort() {
+void mmWaveRadar::connectPort() {
     try {
         userPort.setPort(userPort_s);
         userPort.setBaudrate(userBaud);
@@ -37,7 +37,7 @@ void Radar::connectPort() {
     }
 }
 
-void Radar::configure(const char* configCommands[], const unsigned long configSize) {
+void mmWaveRadar::configure(const char* configCommands[], const unsigned long configSize) {
     if (!userPort_error) {
         std::string command = configDataPort + "\r\n";
         userPort.write(command);
@@ -50,32 +50,33 @@ void Radar::configure(const char* configCommands[], const unsigned long configSi
             userPort.write(command);
             usleep(10000);
         }
-        std::cout << "Radar should be configured..." << std::endl;
+        std::cout << "mmWaveRadar should be configured..." << std::endl;
     }
     else {
         std::cerr << "User port is not open..." << std::endl;
     }
 }
 
-void Radar::start() {
+void mmWaveRadar::start() {
     configure(iwr1843ConfigCommands, configCommandsSize);
     std::string command = sensorStart + "\r\n";
     userPort.write(command);
     usleep(10000);
-    std::cout << "Starting Radar..." << std::endl;
+    std::cout << "Starting mmWaveRadar..." << std::endl;
 }
 
-void Radar::stop() {
+void mmWaveRadar::stop() {
     std::string command = sensorStop + "\r\n";
     userPort.write(command);
     usleep(10000);
-    std::cout << "Stopping Radar..." << std::endl;
+    std::cout << "Stopping mmWaveRadar..." << std::endl;
 }
 
-std::vector<uint8_t> Radar::read() {
+std::vector<std::vector<uint8_t>> mmWaveRadar::read() {
     const std::vector<uint8_t> magicBytes = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
     std::vector<uint8_t> buf;
     std::vector<uint8_t> frame;
+
     size_t i = 0;
 
     while (dataPort.available() && buf.size() < MAX_BUFFER_SIZE) {
@@ -84,12 +85,12 @@ std::vector<uint8_t> Radar::read() {
         buf.push_back(byte);
     }
 
-    std::cout << "buf size: " << std::dec << (int)buf.size() << std::endl;
-    std::cout << "buf data:" << std::endl;
-    for (auto i = 0; i < buf.size(); i++) {
-        std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)buf[i];
-    }
-    std::cout << std::endl << std::endl;
+    // std::cout << "buf size: " << std::dec << (int)buf.size() << std::endl;
+    // std::cout << "buf data:" << std::endl;
+    // for (auto i = 0; i < buf.size(); i++) {
+    //     std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)buf[i];
+    // }
+    // std::cout << std::endl << std::endl;
 
     while (i <= buf.size() - magicBytes.size()) {
         if (std::equal(magicBytes.begin(), magicBytes.end(), buf.begin() + i)) {
