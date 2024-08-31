@@ -21,15 +21,7 @@ int main() {
     sleep(2);
 
     while (true) {
-        std::vector<uint8_t> data = my_mmWaveRadar.read();
-
-        std::cout << "data size: " << std::dec << (int)data.size() << std::endl;
-        std::cout << "data:" << std::endl;
-        for (auto i = 0; i < data.size(); i++) {
-            std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (unsigned short)data[i];
-        }
-        std::cout << std::endl << std::endl;
-
+        std::vector<std::vector<uint8_t>> data = my_mmWaveRadar.read();
         sleep(1);
         // usleep(80000);
     }
