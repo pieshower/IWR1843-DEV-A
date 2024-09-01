@@ -4,16 +4,20 @@
 #include "../include/mmWaveRadar.h"
 #include "../include/iwr1843Config.h"
 
-mmWaveRadar::mmWaveRadar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_) {
-    userBaud = userBaud_;
-    userPort_s = userPort_s_;
-    dataBaud = dataBaud_;
-    dataPort_s = dataPort_s_;
-}
 
-mmWaveRadar::~mmWaveRadar() {
-    delete this;
-}
+// std::string userPort_s = "/dev/ttyACM2";
+// std::string dataPort_s = "/dev/ttyACM3";
+
+// int userPort_baud = 115200;
+// int dataPort_baud = 921600;
+
+
+// mmWaveRadar::mmWaveRadar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_) {
+//     userBaud = userBaud_;
+//     userPort_s = userPort_s_;
+//     dataBaud = dataBaud_;
+//     dataPort_s = dataPort_s_;
+// }
 
 void mmWaveRadar::connectPort() {
     try {
@@ -84,12 +88,12 @@ std::vector<std::vector<uint8_t>> mmWaveRadar::read() {
         buf.push_back(byte);
     }
 
-    std::cout << "Buffer contents (" << buf.size() << " bytes):" << std::endl;
-    for (size_t i = 0; i < buf.size(); ++i) {
-        std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(buf[i]) << " ";
-        if ((i + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
-    }
-    std::cout << std::endl << std::dec;
+    // std::cout << "Buffer contents (" << buf.size() << " bytes):" << std::endl;
+    // for (size_t i = 0; i < buf.size(); ++i) {
+    //     std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(buf[i]) << " ";
+    //     if ((i + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
+    // }
+    // std::cout << std::endl << std::dec;
 
     for (size_t i = 0; i <= buf.size() - magicBytes.size();) {
         if (std::equal(magicBytes.begin(), magicBytes.end(), buf.begin() + i)) {
@@ -110,7 +114,7 @@ std::vector<std::vector<uint8_t>> mmWaveRadar::read() {
         }
     }
 
-
+    std::cout << "frames size: " << frames.size() << std::endl;
     for (size_t i = 0; i < frames.size(); ++i) {
         std::cout << "Frame " << i + 1 << " (" << frames[i].size() << " bytes):" << std::endl;
         for (size_t j = 0; j < frames[i].size(); ++j) {
@@ -119,7 +123,6 @@ std::vector<std::vector<uint8_t>> mmWaveRadar::read() {
         }
         std::cout << std::endl << std::dec;
     }
-
 
     return frames;
 }

@@ -6,7 +6,7 @@
 #include <serial/serial.h>
 
 
-#define MAX_BUFFER_SIZE 2048
+#define MAX_BUFFER_SIZE 4096
 
 
 typedef struct data_header_t {
@@ -29,20 +29,36 @@ class mmWaveRadar {
 private:
     serial::Serial userPort;
     serial::Serial dataPort;
-    int userBaud = 0;
-    int dataBaud = 0;
-    std::string userPort_s;
-    std::string dataPort_s;
+    
+    int userBaud = 115200;
+    int dataBaud = 921600;
+    
+    std::string userPort_s = "/dev/ttyACM2";
+    std::string dataPort_s = "/dev/ttyACM3";
+    
     bool userPort_error = false;
     bool dataPort_error = false;
+    
     void configure(const char* configCommands[], const unsigned long configSize);
-public:
-    mmWaveRadar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_);
-    ~mmWaveRadar();
+    
+    static mmWaveRadar mmWaveRadar_;
+
+     mmWaveRadar() { connectPort(); }
+    ~mmWaveRadar() { delete this; }
+    
+    // mmWaveRadar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_);
+
     void connectPort();
+
+public:
+    static mmWaveRadar& get_mmWaveRadar() { return mmWaveRadar_; }
+
     void start();
     void  stop();
+    
     std::vector<std::vector<uint8_t>> read();
 };
+
+inline mmWaveRadar mmWaveRadar::mmWaveRadar_;
 
 #endif
