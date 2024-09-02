@@ -79,7 +79,6 @@ void mmWaveRadar::read() {
             buf.push_back(byte);
         }
         parseFrames(buf, frame, frames);
-
     } while (frames.size() < MAX_BUFFERED_FRAMES_SIZE);
     
     for (std::vector<uint8_t> &i : frames) {
