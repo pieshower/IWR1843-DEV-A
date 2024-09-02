@@ -174,7 +174,7 @@ void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
         }
         j++;
         if (j > 3) {
-            dataComplete_.detectedObject.push_back(detectedObject_);
+            dataComplete_.detectedObjects.push_back(detectedObject_);
             j = 0;
         }
     }
@@ -186,12 +186,12 @@ void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
     std::cout << "number of tlvs: " << dataComplete_.dataHeader.numTLVs << std::endl << std::endl;
     int num = 1;
 
-    for (detected_object_t &i : dataComplete_.detectedObject) {
+    for (detected_object_t &i : dataComplete_.detectedObjects) {
         std::cout << "Object " << num << ":" << std::endl;
-        std::cout << "x: " << detectedObject_.x << std::endl;
-        std::cout << "y: " << detectedObject_.y << std::endl;
-        std::cout << "z: " << detectedObject_.z << std::endl;
-        std::cout << "velocity: " << detectedObject_.velocity << std::endl << std::endl;
+        std::cout << "x: " << i.x << std::endl;
+        std::cout << "y: " << i.y << std::endl;
+        std::cout << "z: " << i.z << std::endl;
+        std::cout << "velocity: " << i.velocity << std::endl << std::endl;
         num++;
     }
 

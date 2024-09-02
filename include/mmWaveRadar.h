@@ -37,7 +37,7 @@ typedef struct detected_object_t {
 typedef struct data_complete_t {
     data_header_t dataHeader;
     data_tl_t dataTL;
-    std::vector<detected_object_t> detectedObject;
+    std::vector<detected_object_t> detectedObjects;
 } data_complete_t;
 
 class mmWaveRadar {
