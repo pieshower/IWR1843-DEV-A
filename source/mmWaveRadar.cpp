@@ -156,7 +156,7 @@ void mmWaveRadar::parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL)
         }
         dataTL_i++;
     }
- }
+}
 
  void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, data_complete_t &_dataComplete, detected_object_t &_detectedObject) {
     uint8_t detectedObject_i = 0;
@@ -177,7 +177,7 @@ void mmWaveRadar::parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL)
             detectedObject_i = 0;
         }
     }
- }
+}
 
 void mmWaveRadar::updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete) {
     _dataComplete_v.push_back(_dataComplete);
