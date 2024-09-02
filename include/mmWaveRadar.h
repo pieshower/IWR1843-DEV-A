@@ -67,13 +67,14 @@ private:
     data_header_t dataHeader;
     data_tl_t dataTL;
     detected_object_t detectedObject;
-    
-    std::vector<data_complete_t> *dataComplete;
+
+    data_complete_t dataComplete;
+    std::vector<data_complete_t> dataComplete_v;
 
     void parseFrame(std::vector<uint8_t> &_frame);
-    void parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t *_dataHeader);
-    void parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t *_dataTL);
-    void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t *_detectedObject);
+    void parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader);
+    void parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL);
+    void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t &_detectedObject);
 
 public:
     static mmWaveRadar& getRadarGuy() { return RadarGuy; }

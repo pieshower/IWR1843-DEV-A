@@ -193,51 +193,51 @@ void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
     dataComplete.push_back(dataComplete_);
 }
 
-void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &dataHeader_) {
+void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader) {
     uint8_t dataHeader_i = 0;
     for (size_t i = sizeof(data_header_t::magicBytes); i < sizeof(data_header_t); i += 4) {
         uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
         switch (dataHeader_i) {
-            case 0: dataHeader_->version = doubleword; break;
-            case 1: dataHeader_->totalPacketLen = doubleword; break;
-            case 2: dataHeader_->platform = doubleword; break;
-            case 3: dataHeader_->frameNumber = doubleword; break;
-            case 4: dataHeader_->timeCpuCycles = doubleword; break;
-            case 5: dataHeader_->numDetectedObj = doubleword; break;
-            case 6: dataHeader_->numTLVs = doubleword; break;
-            case 7: dataHeader_->subFrameNumber = doubleword; break;
+            case 0: _dataHeader.version = doubleword; break;
+            case 1: _dataHeader.totalPacketLen = doubleword; break;
+            case 2: _dataHeader.platform = doubleword; break;
+            case 3: _dataHeader.frameNumber = doubleword; break;
+            case 4: _dataHeader.timeCpuCycles = doubleword; break;
+            case 5: _dataHeader.numDetectedObj = doubleword; break;
+            case 6: _dataHeader.numTLVs = doubleword; break;
+            case 7: _dataHeader.subFrameNumber = doubleword; break;
         }
         dataHeader_i++;
     }
 }
 
- void mmWaveRadar::parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t *_dataTL) {
+void mmWaveRadar::parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL) {
     uint8_t dataTL_i = 0;
     for (size_t i = sizeof(data_header_t); i < sizeof(data_tl_t) + sizeof(data_header_t); i += 4) {
         uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
         switch (dataTL_i) {
-            case 0: _dataTL->type = doubleword; break;
-            case 1: _dataTL->length = doubleword; break;
+            case 0: _dataTL.type = doubleword; break;
+            case 1: _dataTL.length = doubleword; break;
         }
         dataTL_i++;
     }
  }
 
- void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t *_detectedObject) {
+ void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t &_detectedObject) {
     uint8_t detectedObject_i = 0;
     for (size_t i = sizeof(data_header_t) + sizeof(data_tl_t); i < sizeof(data_header_t) + sizeof(data_tl_t) + dataTL.length; i += 4) {
         float temp;
         uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
         std::memcpy(&temp, &doubleword, sizeof(float));
         switch (detectedObject_i) {
-            case 0: _detectedObject->x = temp; break;
-            case 1: _detectedObject->y = temp; break;
-            case 2: _detectedObject->z = temp; break;
-            case 3: _detectedObject->velocity = temp; break;
+            case 0: _detectedObject.x = temp; break;
+            case 1: _detectedObject.y = temp; break;
+            case 2: _detectedObject.z = temp; break;
+            case 3: _detectedObject.velocity = temp; break;
         }
         detectedObject_i++;
         if (detectedObject_i > 3) {
-            dataComplete->detectedObjects.push_back(*_detectedObject);
+            dataComplete.detectedObjects.push_back(_detectedObject);
             detectedObject_i = 0;
         }
     }
