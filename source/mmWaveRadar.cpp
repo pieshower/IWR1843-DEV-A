@@ -193,7 +193,7 @@ void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
     dataComplete.push_back(dataComplete_);
 }
 
-void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t *dataHeader_) {
+void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &dataHeader_) {
     uint8_t dataHeader_i = 0;
     for (size_t i = sizeof(data_header_t::magicBytes); i < sizeof(data_header_t); i += 4) {
         uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
@@ -237,7 +237,7 @@ void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t *
         }
         detectedObject_i++;
         if (detectedObject_i > 3) {
-            dataComplete->detectedObjects.push_back(_detectedObject);
+            dataComplete->detectedObjects.push_back(*_detectedObject);
             detectedObject_i = 0;
         }
     }
