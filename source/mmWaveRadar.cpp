@@ -83,12 +83,6 @@ void mmWaveRadar::read() {
     } while (frames.size() < MAX_BUFFERED_FRAMES_SIZE);
     
     for (std::vector<uint8_t> &i : frames) {
-        // std::cout << "current frame (" << i.size() << " bytes):" << std::endl;
-        // for (size_t j = 0; j < i.size(); ++j) {
-        //     std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i[j]) << " ";
-        //     if ((j + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
-        // }
-        // std::cout << std::endl << std::dec;
         parseFrame(i);
     }
     // std::cout << "number of recorded frames before clearing: " << frames.size() << std::endl;
@@ -117,17 +111,17 @@ void mmWaveRadar::parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &
 }
 
 void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
-
+    // std::cout << "current frame (" << i.size() << " bytes):" << std::endl;
+    // for (size_t j = 0; j < i.size(); ++j) {
+    //     std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i[j]) << " ";
+    //     if ((j + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
+    // }
+    // std::cout << std::endl << std::dec;
     parseFrameHeader(_frame, dataHeader);
-
-    std::cout << "current number of objects detected: " << dataHeader.numDetectedObj << std::endl;
-
+    // std::cout << "current number of objects detected: " << dataHeader.numDetectedObj << std::endl;
     parseFrameTL(_frame, dataTL);
-
-    std::cout << "current number tlv length: " << dataTL.length << std::endl << std::endl;
-
+    // std::cout << "current number tlv length: " << dataTL.length << std::endl << std::endl;
     parseFrameDetectedObjects(_frame, dataComplete, detectedObject);
-
     updateDataComplete(dataComplete_v, dataComplete);
 }
 
