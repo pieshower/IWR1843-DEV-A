@@ -74,8 +74,9 @@ private:
     void parseFrame(std::vector<uint8_t> &_frame);
     void parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader);
     void parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL);
-    void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t &_detectedObject);
+    void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, data_complete_t &_dataComplete, detected_object_t &_detectedObject);
 
+    void updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete);
 public:
     static mmWaveRadar& getRadarGuy() { return RadarGuy; }
 
