@@ -54,19 +54,26 @@ private:
     bool userPort_error = false;
     bool dataPort_error = false;
     
-    void configure(const char* configCommands[], const unsigned long configSize);
-    void connectPort();
-    
-    void parseFrame(std::vector<uint8_t> &_frame);
-
     static mmWaveRadar RadarGuy;
 
      mmWaveRadar() { connectPort(); }
     ~mmWaveRadar() { delete this; }
 
-    std::vector<data_complete_t> dataComplete;
+    void configure(const char* configCommands[], const unsigned long configSize);
+    void connectPort();
+
+    std::vector<uint8_t> frame;
+    std::vector<std::vector<uint8_t>> frames;
+    data_header_t dataHeader;
+    data_tl_t dataTL;
+    detected_object_t detectedObject;
     
-    // mmWaveRadar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_);
+    std::vector<data_complete_t> *dataComplete;
+
+    void parseFrame(std::vector<uint8_t> &_frame);
+    void parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t *_dataHeader);
+    void parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t *_dataTL);
+    void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t *_detectedObject);
 
 public:
     static mmWaveRadar& getRadarGuy() { return RadarGuy; }
