@@ -72,31 +72,35 @@ void mmWaveRadar::stop() {
 void mmWaveRadar::read() {
     std::vector<uint8_t> buf;
 
-    while (dataPort.available() && buf.size() < MAX_BUFFER_SIZE) {
-        uint8_t byte;
-        dataPort.read(&byte, 1);
-        buf.push_back(byte);
-    }
+    do {
+        while (dataPort.available() && buf.size() < MAX_BUFFER_SIZE) {
+            uint8_t byte;
+            dataPort.read(&byte, 1);
+            buf.push_back(byte);
+        }
+        parseFrames(buf, frame, frames);
 
-    parseFrames(buf, frame, frames);
-
+    } while (frames.size() < MAX_BUFFERED_FRAMES_SIZE);
+    
     for (std::vector<uint8_t> &i : frames) {
         // std::cout << "current frame (" << i.size() << " bytes):" << std::endl;
         // for (size_t j = 0; j < i.size(); ++j) {
         //     std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i[j]) << " ";
         //     if ((j + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
         // }
-        // std::cout << std::endl << std::endl << std::dec;
+        // std::cout << std::endl << std::dec;
         parseFrame(i);
     }
+    // std::cout << "number of recorded frames before clearing: " << frames.size() << std::endl;
+    frames.clear();
 }
 
 void mmWaveRadar::parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &_frame, std::vector<std::vector<uint8_t>> &_frames) {
+    const std::vector<uint8_t> magicBytes = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
     for (size_t i = 0; i <= _buf.size() - sizeof(data_header_t::magicBytes);) {
-        if (std::equal(dataHeader.magicBytes[0], dataHeader.magicBytes[7], _buf.begin() + i)) {
+        if (std::equal(magicBytes.begin(), magicBytes.end(), _buf.begin() + i)) {
             size_t frameStart = i;
             uint32_t frameSize = (_buf[i + 15] << 24) | (_buf[i + 14] << 16) | (_buf[i + 13] << 8) | (_buf[i + 12]);
-
             if (i + frameSize <= _buf.size()) {
                 _frame.insert(_frame.end(), _buf.begin() + frameStart, _buf.begin() + i + frameSize);
                 _frames.push_back(_frame);
@@ -110,7 +114,6 @@ void mmWaveRadar::parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &
             i++;
         }
     }
-
 }
 
 void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
@@ -121,7 +124,7 @@ void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
 
     parseFrameTL(_frame, dataTL);
 
-    std::cout << "current number tlv length: " << dataTL.length << std::endl;
+    std::cout << "current number tlv length: " << dataTL.length << std::endl << std::endl;
 
     parseFrameDetectedObjects(_frame, dataComplete, detectedObject);
 
@@ -181,7 +184,6 @@ void mmWaveRadar::parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL)
 
 void mmWaveRadar::updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete) {
     _dataComplete_v.push_back(_dataComplete);
-
     int num = 1;
     for (detected_object_t i : _dataComplete.detectedObjects) {
         std::cout << "Object " << num << ":" << std::endl;
@@ -191,6 +193,8 @@ void mmWaveRadar::updateDataComplete(std::vector<data_complete_t> &_dataComplete
         std::cout << "velocity: " << i.velocity << std::endl << std::endl;
         num++;
     }
-
     _dataComplete.detectedObjects.clear();
+    if (_dataComplete_v.size() >= MAX_BUFFERED_COMPLETE_DATA) {
+        _dataComplete_v.clear();
+    }
 }

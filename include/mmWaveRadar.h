@@ -8,6 +8,8 @@
 
 #define MAX_BUFFER_SIZE 4096
 #define HEADER_SIZE_IN_BYTES 40
+#define MAX_BUFFERED_FRAMES_SIZE 10
+#define MAX_BUFFERED_COMPLETE_DATA 10
 
 
 typedef struct data_header_t {
@@ -48,8 +50,8 @@ private:
     int userBaud = 115200;
     int dataBaud = 921600;
     
-    std::string userPort_s = "/dev/ttyACM2";
-    std::string dataPort_s = "/dev/ttyACM3";
+    std::string userPort_s = "/dev/ttyACM4";
+    std::string dataPort_s = "/dev/ttyACM5";
     
     bool userPort_error = false;
     bool dataPort_error = false;
