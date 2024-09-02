@@ -70,7 +70,6 @@ void mmWaveRadar::stop() {
 }
 
 void mmWaveRadar::read() {
-    const std::vector<uint8_t> magicBytes = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
     std::vector<uint8_t> buf;
 
     while (dataPort.available() && buf.size() < MAX_BUFFER_SIZE) {
@@ -79,41 +78,7 @@ void mmWaveRadar::read() {
         buf.push_back(byte);
     }
 
-    // std::cout << "Buffer contents (" << buf.size() << " bytes):" << std::endl;
-    // for (size_t i = 0; i < buf.size(); ++i) {
-    //     std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(buf[i]) << " ";
-    //     if ((i + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
-    // }
-    // std::cout << std::endl << std::dec;
-
-    for (size_t i = 0; i <= buf.size() - magicBytes.size();) {
-        if (std::equal(magicBytes.begin(), magicBytes.end(), buf.begin() + i)) {
-            size_t frameStart = i;
-            uint32_t frameSize = (buf[i + 15] << 24) | (buf[i + 14] << 16) | (buf[i + 13] << 8) | (buf[i + 12]);
-
-            if (i + frameSize <= buf.size()) {
-                frame.insert(frame.end(), buf.begin() + frameStart, buf.begin() + i + frameSize);
-                frames.push_back(frame);
-                frame.clear();
-                buf.erase(buf.begin(), buf.begin() + i + frameSize);
-                i = 0;
-            } else {
-                break;
-            }
-        } else {
-            i++;
-        }
-    }
-
-    // std::cout << "frames size: " << frames.size() << std::endl;
-    // for (size_t i = 0; i < frames.size(); ++i) {
-    //     std::cout << "Frame " << i + 1 << " (" << frames[i].size() << " bytes):" << std::endl;
-    //     for (size_t j = 0; j < frames[i].size(); ++j) {
-    //         std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(frames[i][j]) << " ";
-    //         if ((j + 1) % 16 == 0) std::cout << std::endl;
-    //     }
-    //     std::cout << std::endl << std::dec;
-    // }
+    parseFrames(buf, frame, frames);
 
     for (std::vector<uint8_t> &i : frames) {
         // std::cout << "current frame (" << i.size() << " bytes):" << std::endl;
@@ -124,6 +89,28 @@ void mmWaveRadar::read() {
         // std::cout << std::endl << std::endl << std::dec;
         parseFrame(i);
     }
+}
+
+void mmWaveRadar::parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &_frame, std::vector<std::vector<uint8_t>> &_frames) {
+    for (size_t i = 0; i <= _buf.size() - sizeof(data_header_t::magicBytes);) {
+        if (std::equal(dataHeader.magicBytes[0], dataHeader.magicBytes[7], _buf.begin() + i)) {
+            size_t frameStart = i;
+            uint32_t frameSize = (_buf[i + 15] << 24) | (_buf[i + 14] << 16) | (_buf[i + 13] << 8) | (_buf[i + 12]);
+
+            if (i + frameSize <= _buf.size()) {
+                _frame.insert(_frame.end(), _buf.begin() + frameStart, _buf.begin() + i + frameSize);
+                _frames.push_back(_frame);
+                _frame.clear();
+                _buf.erase(_buf.begin(), _buf.begin() + i + frameSize);
+                i = 0;
+            } else {
+                break;
+            }
+        } else {
+            i++;
+        }
+    }
+
 }
 
 void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {

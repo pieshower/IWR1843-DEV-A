@@ -11,7 +11,7 @@
 
 
 typedef struct data_header_t {
-    uint8_t magicBytes[8] = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
+    const uint8_t magicBytes[8] = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
     uint32_t version;
     uint32_t totalPacketLen;
     uint32_t platform;
@@ -71,12 +71,14 @@ private:
     data_complete_t dataComplete;
     std::vector<data_complete_t> dataComplete_v;
 
+    void parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &_frame, std::vector<std::vector<uint8_t>> &_frames);
     void parseFrame(std::vector<uint8_t> &_frame);
     void parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader);
     void parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL);
     void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, data_complete_t &_dataComplete, detected_object_t &_detectedObject);
 
     void updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete);
+
 public:
     static mmWaveRadar& getRadarGuy() { return RadarGuy; }
 
