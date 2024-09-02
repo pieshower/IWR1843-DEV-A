@@ -76,7 +76,7 @@ void mmWaveRadar::stop() {
     std::cout << "Stopping mmWaveRadar..." << std::endl;
 }
 
-std::vector<std::vector<uint8_t>> mmWaveRadar::read() {
+void mmWaveRadar::read() {
     const std::vector<uint8_t> magicBytes = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
     std::vector<uint8_t> buf;
     std::vector<uint8_t> frame;
@@ -114,15 +114,80 @@ std::vector<std::vector<uint8_t>> mmWaveRadar::read() {
         }
     }
 
-    std::cout << "frames size: " << frames.size() << std::endl;
-    for (size_t i = 0; i < frames.size(); ++i) {
-        std::cout << "Frame " << i + 1 << " (" << frames[i].size() << " bytes):" << std::endl;
-        for (size_t j = 0; j < frames[i].size(); ++j) {
-            std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(frames[i][j]) << " ";
-            if ((j + 1) % 16 == 0) std::cout << std::endl;
+    // std::cout << "frames size: " << frames.size() << std::endl;
+    // for (size_t i = 0; i < frames.size(); ++i) {
+    //     std::cout << "Frame " << i + 1 << " (" << frames[i].size() << " bytes):" << std::endl;
+    //     for (size_t j = 0; j < frames[i].size(); ++j) {
+    //         std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(frames[i][j]) << " ";
+    //         if ((j + 1) % 16 == 0) std::cout << std::endl;
+    //     }
+    //     std::cout << std::endl << std::dec;
+    // }
+
+    for (std::vector<uint8_t> &i : frames) {
+        parseFrame(i);
+    }
+}
+
+void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
+    data_complete_t dataComplete_;
+    detected_object_t detectedObject_;
+    uint8_t j = 0;
+
+    for (size_t i = sizeof(data_header_t::magicBytes); i < sizeof(data_header_t); i += 4) {
+        uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
+        switch (j) {
+            case 0: dataComplete_.dataHeader.version = doubleword; break;
+            case 1: dataComplete_.dataHeader.totalPacketLen = doubleword; break;
+            case 2: dataComplete_.dataHeader.platform = doubleword; break;
+            case 3: dataComplete_.dataHeader.frameNumber = doubleword; break;
+            case 4: dataComplete_.dataHeader.timeCpuCycles = doubleword; break;
+            case 5: dataComplete_.dataHeader.numDetectedObj = doubleword; break;
+            case 6: dataComplete_.dataHeader.numTLVs = doubleword; break;
+            case 7: dataComplete_.dataHeader.subFrameNumber = doubleword; break;
         }
-        std::cout << std::endl << std::dec;
+        j++;
     }
 
-    return frames;
+    j = 0;
+
+    for (size_t i = sizeof(data_header_t); i < sizeof(data_tl_t) + sizeof(data_header_t); i += 4) {
+        uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
+        switch (j) {
+            case 0: dataComplete_.dataTL.type = doubleword; break;
+            case 1: dataComplete_.dataTL.length = doubleword; break;
+        }
+        j++;
+    }
+
+    j = 0;
+
+    for (size_t i = sizeof(data_header_t) + sizeof(data_tl_t); i < sizeof(data_header_t) + sizeof(data_tl_t) + dataComplete_.dataTL.length; i += 4) {
+        float temp;
+        uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
+        std::memcpy(&temp, &doubleword, sizeof(float));
+        switch (j) {
+            case 0: detectedObject_.x = temp; break;
+            case 1: detectedObject_.y = temp; break;
+            case 2: detectedObject_.z = temp; break;
+            case 3: detectedObject_.velocity = temp; break;
+        }
+        j++;
+        if (!(i % 16) && j > 3) {
+            dataComplete_.detectedObject.push_back(detectedObject_);
+            j = 0;
+        }
+    }
+    
+    std::cout << "version: " << dataComplete_.dataHeader.version << std::endl;
+    std::cout << "TLV type: " << dataComplete_.dataTL.type << std::endl;
+    std::cout << "TLV length: " << dataComplete_.dataTL.length << std::endl;
+    std::cout << "number of objects: " << dataComplete_.dataHeader.numDetectedObj << std::endl;
+    std::cout << "current Object:" << std::endl;
+    std::cout << "x: " << detectedObject_.x << std::endl;
+    std::cout << "y: " << detectedObject_.y << std::endl;
+    std::cout << "z: " << detectedObject_.z << std::endl;
+    std::cout << "velocity: " << detectedObject_.velocity << std::endl;
+
+    dataComplete.push_back(dataComplete_);
 }

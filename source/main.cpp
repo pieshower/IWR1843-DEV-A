@@ -12,7 +12,7 @@ int main() {
     sleep(2);
 
     while (true) {
-        std::vector<std::vector<uint8_t>> data = mmWaveRadar::get_mmWaveRadar().read();
+        mmWaveRadar::get_mmWaveRadar().read();
         sleep(1);
         // usleep(80000);
     }
