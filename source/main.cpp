@@ -8,13 +8,12 @@
 
 int main() {
 
-    mmWaveRadar::get_mmWaveRadar().start();
+    mmWaveRadar::getRadarGuy().start();
     sleep(2);
 
     while (true) {
-        mmWaveRadar::get_mmWaveRadar().read();
+        mmWaveRadar::getRadarGuy().read();
         sleep(1);
-        // usleep(80000);
     }
 
     return 0;

@@ -173,21 +173,27 @@ void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
             case 3: detectedObject_.velocity = temp; break;
         }
         j++;
-        if (!(i % 16) && j > 3) {
+        if (j > 3) {
             dataComplete_.detectedObject.push_back(detectedObject_);
             j = 0;
         }
     }
     
-    std::cout << "version: " << dataComplete_.dataHeader.version << std::endl;
-    std::cout << "TLV type: " << dataComplete_.dataTL.type << std::endl;
-    std::cout << "TLV length: " << dataComplete_.dataTL.length << std::endl;
+    // std::cout << "version: " << dataComplete_.dataHeader.version << std::endl;
+    // std::cout << "TLV type: " << dataComplete_.dataTL.type << std::endl;
+    // std::cout << "TLV length: " << dataComplete_.dataTL.length << std::endl;
     std::cout << "number of objects: " << dataComplete_.dataHeader.numDetectedObj << std::endl;
-    std::cout << "current Object:" << std::endl;
-    std::cout << "x: " << detectedObject_.x << std::endl;
-    std::cout << "y: " << detectedObject_.y << std::endl;
-    std::cout << "z: " << detectedObject_.z << std::endl;
-    std::cout << "velocity: " << detectedObject_.velocity << std::endl;
+    std::cout << "number of tlvs: " << dataComplete_.dataHeader.numTLVs << std::endl << std::endl;
+    int num = 1;
+
+    for (detected_object_t &i : dataComplete_.detectedObject) {
+        std::cout << "Object " << num << ":" << std::endl;
+        std::cout << "x: " << detectedObject_.x << std::endl;
+        std::cout << "y: " << detectedObject_.y << std::endl;
+        std::cout << "z: " << detectedObject_.z << std::endl;
+        std::cout << "velocity: " << detectedObject_.velocity << std::endl << std::endl;
+        num++;
+    }
 
     dataComplete.push_back(dataComplete_);
 }

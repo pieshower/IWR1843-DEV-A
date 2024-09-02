@@ -59,7 +59,7 @@ private:
     
     void parseFrame(std::vector<uint8_t> &_frame);
 
-    static mmWaveRadar mmWaveRadar_;
+    static mmWaveRadar RadarGuy;
 
      mmWaveRadar() { connectPort(); }
     ~mmWaveRadar() { delete this; }
@@ -69,7 +69,7 @@ private:
     // mmWaveRadar(std::string userPort_s_, int userBaud_, std::string dataPort_s_, int dataBaud_);
 
 public:
-    static mmWaveRadar& get_mmWaveRadar() { return mmWaveRadar_; }
+    static mmWaveRadar& getRadarGuy() { return RadarGuy; }
 
     void start();
     void  stop();
@@ -77,6 +77,6 @@ public:
     void read();
 };
 
-inline mmWaveRadar mmWaveRadar::mmWaveRadar_;
+inline mmWaveRadar mmWaveRadar::RadarGuy;
 
 #endif
