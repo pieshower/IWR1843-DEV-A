@@ -64,7 +64,6 @@ private:
     void configure(const char* configCommands[], const unsigned long configSize);
     void connectPort();
 
-
     void parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &_frame, std::vector<std::vector<uint8_t>> &_frames);
     void parseFrame(std::vector<uint8_t> &_frame);
     void parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader);
