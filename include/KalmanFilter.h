@@ -3,7 +3,10 @@
 
 #include "../include/mmWaveRadar.h"
 
-class kalmanFilter {
+class kalmanFilter : public mmWaveRadar {
+private:
+
+public:
 
 };
 

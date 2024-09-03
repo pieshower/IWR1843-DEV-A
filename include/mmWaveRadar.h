@@ -59,19 +59,11 @@ private:
     static mmWaveRadar RadarGuy;
 
      mmWaveRadar() { connectPort(); }
-    ~mmWaveRadar() { delete this; }
+    ~mmWaveRadar() { delete &RadarGuy; }
 
     void configure(const char* configCommands[], const unsigned long configSize);
     void connectPort();
 
-    std::vector<uint8_t> frame;
-    std::vector<std::vector<uint8_t>> frames;
-    data_header_t dataHeader;
-    data_tl_t dataTL;
-    detected_object_t detectedObject;
-
-    data_complete_t dataComplete;
-    std::vector<data_complete_t> dataComplete_v;
 
     void parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &_frame, std::vector<std::vector<uint8_t>> &_frames);
     void parseFrame(std::vector<uint8_t> &_frame);
@@ -80,6 +72,17 @@ private:
     void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, data_complete_t &_dataComplete, detected_object_t &_detectedObject);
 
     void updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete);
+
+    std::vector<uint8_t> frame;
+    std::vector<std::vector<uint8_t>> frames;
+    data_header_t dataHeader;
+    data_tl_t dataTL;
+    detected_object_t detectedObject;
+
+    data_complete_t dataComplete;
+
+protected:
+    std::vector<data_complete_t> dataComplete_v;
 
 public:
     static mmWaveRadar& getRadarGuy() { return RadarGuy; }
