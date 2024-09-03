@@ -58,9 +58,6 @@ private:
     
     static mmWaveRadar RadarGuy;
 
-     mmWaveRadar() { connectPort(); }
-    ~mmWaveRadar() { delete &RadarGuy; }
-
     void configure(const char* configCommands[], const unsigned long configSize);
     void connectPort();
 
@@ -81,6 +78,9 @@ private:
     data_complete_t dataComplete;
 
 protected:
+     mmWaveRadar() { connectPort(); }
+    ~mmWaveRadar() { delete &RadarGuy; }
+    
     std::vector<data_complete_t> dataComplete_v;
 
 public:
