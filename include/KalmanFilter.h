@@ -8,20 +8,23 @@
 class kalmanFilter /* :  public mmWaveRadar */ {
 private:
 
-    double A;
-    double B;
-    double Q;
-    double R;
-    double P;
-    double x_hat;
-    double x_hat_new;
-    double v_hat;
-    double dt;
+    float matrixA;
+    float matrixB;
+    float Q;
+    float R;
+    float P;
 
-     kalmanFilter() {}
-    ~kalmanFilter() { delete this; } 
+    float position_i;
+    float position_n;
+    float velocity_i;
+
+    const float time_step = 1.0;
+
 
 public:
+     kalmanFilter() {};
+     kalmanFilter(float inital_pos, float initial_vel);
+    ~kalmanFilter() { delete this; } 
 
 };
 

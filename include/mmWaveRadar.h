@@ -5,15 +5,17 @@
 #include <unistd.h>
 #include <serial/serial.h>
 
+#include "../include/TargetObject.h"
 
 #define MAX_BUFFER_SIZE 4096
 #define HEADER_SIZE_IN_BYTES 40
 #define MAX_BUFFERED_FRAMES_SIZE 10
 #define MAX_BUFFERED_COMPLETE_DATA 10
+#define MAX_DETECTED_OBJECTS 15
 
 
 typedef struct data_header_t {
-    const uint8_t magicBytes[8] = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
+    uint8_t magicBytes[8] = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
     uint32_t version;
     uint32_t totalPacketLen;
     uint32_t platform;
@@ -50,13 +52,16 @@ private:
     int userBaud = 115200;
     int dataBaud = 921600;
     
-    std::string userPort_s = "/dev/ttyACM4";
-    std::string dataPort_s = "/dev/ttyACM5";
+    std::string userPort_s = "/dev/ttyACM0";
+    std::string dataPort_s = "/dev/ttyACM1";
     
     bool userPort_error = false;
     bool dataPort_error = false;
     
     static mmWaveRadar RadarGuy;
+
+     mmWaveRadar() { connectPort(); }
+    ~mmWaveRadar() { delete &RadarGuy; }
 
     void configure(const char* configCommands[], const unsigned long configSize);
     void connectPort();
@@ -65,23 +70,17 @@ private:
     void parseFrame(std::vector<uint8_t> &_frame);
     void parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader);
     void parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL);
-    void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, data_complete_t &_dataComplete, detected_object_t &_detectedObject);
+    void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t _detectedObject, std::vector<detected_object_t> &_detectedObjects);
 
-    void updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete);
+    void updateDataComplete(data_complete_t &_dataComplete, data_header_t &_dataHeader, data_tl_t &_dataTL, std::vector<detected_object_t> &_detectedObjects);
+    // void updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete);
 
     std::vector<uint8_t> frame;
     std::vector<std::vector<uint8_t>> frames;
     data_header_t dataHeader;
     data_tl_t dataTL;
     detected_object_t detectedObject;
-
-    data_complete_t dataComplete;
-
-protected:
-     mmWaveRadar() { connectPort(); }
-    ~mmWaveRadar() { delete &RadarGuy; }
-    
-    std::vector<data_complete_t> dataComplete_v;
+    std::vector<detected_object_t> detectedObjects;
 
 public:
     static mmWaveRadar& getRadarGuy() { return RadarGuy; }
@@ -90,6 +89,9 @@ public:
     void  stop();
     
     void read();
+
+    data_complete_t dataComplete;
+    // std::vector<data_complete_t> dataComplete_v = {};
 };
 
 inline mmWaveRadar mmWaveRadar::RadarGuy;
