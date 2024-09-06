@@ -1,31 +1,30 @@
 #ifndef KALMANFILTER_H
 #define KALMANFILTER_H
 
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 
 #include "../include/mmWaveRadar.h"
 
-class kalmanFilter /* :  public mmWaveRadar */ {
-private:
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
 
-    float matrixA;
-    float matrixB;
-    float Q;
-    float R;
-    float P;
+class kalmanFilter {
+private:                         
+    VectorXd currentState;  // x 
+    MatrixXd covariance;    // P
+    MatrixXd transition;    // F
 
-    float position_i;
-    float position_n;
-    float velocity_i;
-
-    const float time_step = 1.0;
-
+    MatrixXd covariance_proccessed;   // Q
+    MatrixXd measurement;             // H
+    MatrixXd measurement_covariance;  // R
 
 public:
      kalmanFilter() {};
-     kalmanFilter(float inital_pos, float initial_vel);
-    ~kalmanFilter() { delete this; } 
+    ~kalmanFilter() { delete this; }
 
+    void init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in);
+    void predict();
+    void update(const Eigen::VectorXd &z_);
 };
 
 #endif

@@ -5,7 +5,6 @@
 
 #include "../include/mmWaveRadar.h"
 
-
 int main() {
 
     mmWaveRadar::getRadarGuy().start();

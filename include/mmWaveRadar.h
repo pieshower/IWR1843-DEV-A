@@ -7,6 +7,7 @@
 
 #include "../include/TargetObject.h"
 
+
 #define MAX_BUFFER_SIZE 4096
 #define HEADER_SIZE_IN_BYTES 40
 #define MAX_BUFFERED_FRAMES_SIZE 10
@@ -73,7 +74,6 @@ private:
     void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t _detectedObject, std::vector<detected_object_t> &_detectedObjects);
 
     void updateDataComplete(data_complete_t &_dataComplete, data_header_t &_dataHeader, data_tl_t &_dataTL, std::vector<detected_object_t> &_detectedObjects);
-    // void updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete);
 
     std::vector<uint8_t> frame;
     std::vector<std::vector<uint8_t>> frames;
@@ -91,7 +91,6 @@ public:
     void read();
 
     data_complete_t dataComplete;
-    // std::vector<data_complete_t> dataComplete_v = {};
 };
 
 inline mmWaveRadar mmWaveRadar::RadarGuy;
