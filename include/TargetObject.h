@@ -7,17 +7,16 @@
 
 class targetObject {
 private:
-    kalmanFilter* x_axis;
-    kalmanFilter* y_axis;
-    kalmanFilter* z_axis;
-
-    static uint8_t global_target_index;
-    uint8_t current_tartget_index = global_target_index;
+    std::vector<kalmanFilter> trackers;
+    float distanceThreshold;
 
 public:
-     targetObject(mmWaveRadar& radar);
+     targetObject(float _distanceThreshold);
     ~targetObject() { delete this; };
 
+    float calculateDistance(const kalmanFilter &_kf, const detected_object_t &_detObj);
+
+    void update();
 };
 
 #endif

@@ -23,14 +23,14 @@ void kalmanFilter::predict() {
 }
 
 void kalmanFilter::update(const VectorXd &z) {
-  
+
     float px = currentState(0);
     float py = currentState(1);
     float pz = currentState(2);
     float vx = currentState(3);
     float vy = currentState(4);
     float vz = currentState(5);
-  
+
     float rho = sqrt(px * px + py * py + pz * pz);
     float theta = atan(py / px);
     float phi = acos(pz / rho);
@@ -45,7 +45,7 @@ void kalmanFilter::update(const VectorXd &z) {
     z_pred << rho, theta, phi, rho_dot_p;
 
     VectorXd y = z - z_pred;
-  
+
     if (y(1) > PI) {
         y(1) -= 2 * PI;
     }
@@ -68,7 +68,7 @@ void kalmanFilter::update(const VectorXd &z) {
 
     // Update State
     currentState = currentState + (K * y);
-    
+
     // Update covariance matrix
     long x_size = currentState.size();
     MatrixXd I = MatrixXd::Identity(x_size, x_size);  
