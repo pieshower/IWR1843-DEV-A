@@ -4,9 +4,9 @@
 #include <iostream>
 #include <unistd.h>
 #include <serial/serial.h>
+#include <eigen3/Eigen/Dense>
 
 #include "../include/TargetObject.h"
-
 
 #define MAX_BUFFER_SIZE 4096
 #define HEADER_SIZE_IN_BYTES 40
@@ -14,6 +14,7 @@
 #define MAX_BUFFERED_COMPLETE_DATA 10
 #define MAX_DETECTED_OBJECTS 15
 
+using Eigen::VectorXd;
 
 typedef struct data_header_t {
     uint8_t magicBytes[8] = {0x02, 0x01, 0x04, 0x03, 0x06, 0x05, 0x08, 0x07};
@@ -33,10 +34,9 @@ typedef struct data_tl_t {
 } data_tl_t;
 
 typedef struct detected_object_t {
-    float x;
-    float y;
-    float z;
+    float x, y, z;
     float velocity;
+    VectorXd objectVector = VectorXd(6);
 } detected_object_t;
 
 typedef struct data_complete_t {
@@ -74,6 +74,8 @@ private:
     void parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t _detectedObject, std::vector<detected_object_t> &_detectedObjects);
 
     void updateDataComplete(data_complete_t &_dataComplete, data_header_t &_dataHeader, data_tl_t &_dataTL, std::vector<detected_object_t> &_detectedObjects);
+
+    void convertToVector(detected_object_t &_detectedObject);
 
     std::vector<uint8_t> frame;
     std::vector<std::vector<uint8_t>> frames;

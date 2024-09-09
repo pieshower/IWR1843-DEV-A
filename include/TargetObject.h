@@ -7,16 +7,21 @@
 
 class targetObject {
 private:
-    std::vector<kalmanFilter> trackers;
+    kalmanFilter kalFil;
+    detected_object_t trackedObject;
+    
     float distanceThreshold;
-
+    bool initialized = false;
 public:
-     targetObject(float _distanceThreshold);
+     targetObject();
     ~targetObject() { delete this; };
 
-    float calculateDistance(const kalmanFilter &_kf, const detected_object_t &_detObj);
+    
 
+    float calculateDistance(const detected_object_t , const detected_object_t &_detObj);
     void update();
 };
+
+std::vector<targetObject> trackers;
 
 #endif

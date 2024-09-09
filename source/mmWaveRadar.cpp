@@ -151,11 +151,6 @@ void mmWaveRadar::parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL)
 
 void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t _detectedObject, std::vector<detected_object_t> &_detectedObjects) {
     uint8_t detectedObject_i = 0;
-    // std::cout << "tlv length: " << dataTL.length << std::endl;
-
-    // if (_detectedObjects.size() >= MAX_DETECTED_OBJECTS) {
-    //     _detectedObjects.clear();
-    // }
 
     _detectedObjects.clear();
 
@@ -171,6 +166,7 @@ void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detect
         }
         detectedObject_i++;
         if (detectedObject_i > 3) {
+            convertToVector(_detectedObject);
             _detectedObjects.push_back(_detectedObject);
             detectedObject_i = 0;
         }
@@ -212,4 +208,24 @@ void mmWaveRadar::updateDataComplete(data_complete_t &_dataComplete, data_header
         std::cout << "velocity: " << i.velocity << std::endl << std::endl;
         num++;
     }
+}
+
+void convertToVector(detected_object_t &_detectedObject) {
+    float x = _detectedObject.x;
+    float y = _detectedObject.y;
+    float z = _detectedObject.z;
+    float velocity = _detectedObject.velocity;
+
+    float magnitude = sqrt(x * x + y * y + z * z);
+
+    float vx = velocity * (x / magnitude);
+    float vy = velocity * (y / magnitude);
+    float vz = velocity * (z / magnitude);
+
+    _detectedObject.objectVector[0] = x;
+    _detectedObject.objectVector[1] = y;
+    _detectedObject.objectVector[2] = z;
+    _detectedObject.objectVector[3] = vx;
+    _detectedObject.objectVector[4] = vy;
+    _detectedObject.objectVector[5] = vz;
 }
