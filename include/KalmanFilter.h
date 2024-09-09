@@ -10,13 +10,13 @@ using Eigen::VectorXd;
 
 class kalmanFilter {
 private:                         
-    VectorXd currentState;  // x 
-    MatrixXd covariance;    // P
-    MatrixXd transition;    // F
+    VectorXd X; // current state
+    MatrixXd P; // covariance matrix
+    MatrixXd F; // transition matrix
 
-    MatrixXd covariance_proccessed;   // Q
-    MatrixXd measurement;             // H
-    MatrixXd measurement_covariance;  // R
+    MatrixXd Q; // process covariance matrix
+    MatrixXd H; // measurement matrix
+    MatrixXd R; // measurement covariance matrix
 
 public:
      kalmanFilter() {};

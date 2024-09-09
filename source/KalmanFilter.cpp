@@ -7,29 +7,28 @@ using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
 void kalmanFilter::init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
-    currentState = x_in;
-    covariance = P_in;
-    transition = F_in;
+    X = x_in;
+    P = P_in;
+    F = F_in;
 
-    measurement = H_in;
-    measurement_covariance = R_in;
-    covariance_proccessed = Q_in;
+    H = H_in;
+    R = R_in;
+    Q = Q_in;
 }
 
 void kalmanFilter::predict() {
-    currentState = transition * currentState;
-    MatrixXd transitionTransposed = transition.transpose();
-    covariance = transition * covariance * transitionTransposed + covariance_proccessed;
+    X = F * X;
+    MatrixXd F_t = F.transpose();
+    P = F * P * F_t + Q;
 }
 
 void kalmanFilter::update(const VectorXd &z) {
-
-    float px = currentState(0);
-    float py = currentState(1);
-    float pz = currentState(2);
-    float vx = currentState(3);
-    float vy = currentState(4);
-    float vz = currentState(5);
+    float px = X[0];
+    float py = X[1];
+    float pz = X[2];
+    float vx = X[3];
+    float vy = X[4];
+    float vz = X[5];
 
     float rho = sqrt(px * px + py * py + pz * pz);
     float theta = atan(py / px);
@@ -46,33 +45,33 @@ void kalmanFilter::update(const VectorXd &z) {
 
     VectorXd y = z - z_pred;
 
-    if (y(1) > PI) {
-        y(1) -= 2 * PI;
+    if (y[1] > PI) {
+        y[1] -= 2 * PI;
     }
-    else if (y(1) < -PI) {
-        y(1) += 2 * PI;
-    }
-
-    if (y(2) > PI) {
-        y(2) -= 2 * PI;
-    }
-    else if (y(2) < -PI) {
-        y(2) += 2 * PI;
+    else if (y[1] < -PI) {
+        y[1] += 2 * PI;
     }
 
-    MatrixXd measurementTransposed = measurement.transpose();
-    MatrixXd PHt = covariance * measurementTransposed;
+    if (y[2] > PI) {
+        y[2] -= 2 * PI;
+    }
+    else if (y[2] < -PI) {
+        y[2] += 2 * PI;
+    }
 
-    MatrixXd S = measurement * PHt + measurement_covariance;
-    MatrixXd K = PHt * S.inverse();
+    MatrixXd H_t = H.transpose();
+    MatrixXd PH_t = P * H_t;
+
+    MatrixXd S = H * PH_t + P;
+    MatrixXd K = PH_t * S.inverse();
 
     // Update State
-    currentState = currentState + (K * y);
+    X = X + (K * y);
 
     // Update covariance matrix
-    long x_size = currentState.size();
-    MatrixXd I = MatrixXd::Identity(x_size, x_size);  
-    covariance = (I - K * measurement) * covariance;
+    long x_size = X.size();
+    MatrixXd I = MatrixXd::Identity(x_size, x_size);
+    P = (I - K * H) * P;
 }
 
 
