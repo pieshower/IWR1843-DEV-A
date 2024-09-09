@@ -1,7 +1,7 @@
 #ifndef TARGETOBJECT_H
 #define TARGETOBJECT_H
 
-#include "../include/KalmanFilter.h"
+#include "../include/kalmanFilter.h"
 #include "../include/mmWaveRadar.h"
 
 

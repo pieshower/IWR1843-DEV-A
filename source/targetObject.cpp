@@ -35,7 +35,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
         }
         if (isNewObeject) {
             kalmanFilter newFilter;
-            newFilter.init(obj.objectVector, );
+            // newFilter.init(obj.objectVector, );
             targetObject newTrack(newFilter, obj);
             trackers.push_back(newTrack);
         }
