@@ -36,7 +36,7 @@ typedef struct data_tl_t {
 typedef struct detected_object_t {
     float x, y, z;
     float velocity;
-    VectorXd objectVector = VectorXd(6);
+    VectorXd objectVector;
 } detected_object_t;
 
 typedef struct data_complete_t {

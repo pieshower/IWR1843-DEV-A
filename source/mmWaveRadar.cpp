@@ -210,7 +210,7 @@ void mmWaveRadar::updateDataComplete(data_complete_t &_dataComplete, data_header
     }
 }
 
-void convertToVector(detected_object_t &_detectedObject) {
+void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {
     float x = _detectedObject.x;
     float y = _detectedObject.y;
     float z = _detectedObject.z;
