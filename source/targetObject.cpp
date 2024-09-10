@@ -1,4 +1,5 @@
 #include "../include/targetObject.h"
+#include "../include/kalmanFilter_init.h"
 
 targetObject::targetObject(kalmanFilter _kf, detected_object_t _trackedObject) {
     kalFil = _kf;
@@ -24,11 +25,12 @@ float targetObject::calculateDistance(const targetObject &tracked, const detecte
 }
 
 void targetObject::processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects) {
-    for (const detected_object_t &obj : _detectedObjects) {
+    for (const detected_object_t &object : _detectedObjects) {
         bool isNewObeject = false;
         for (targetObject &tracked : trackers) {
-            if (sameObject(tracked, obj)) {
-                tracked.kalFil.update(obj.spherVector);
+            if (sameObject(tracked, object)) {
+                tracked.kalFil.update(object.spherVector);
+                tracked.trackedObject = object;
             }
             else {
                 isNewObeject = true;
@@ -37,8 +39,8 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
         }
         if (isNewObeject) {
             kalmanFilter newFilter;
-            // newFilter.init(obj.objectVector, );
-            targetObject newTrack(newFilter, obj);
+            newFilter.init(object.stateVector, P_, F_, H_, R_, Q_);
+            targetObject newTrack(newFilter, object);
             trackers.push_back(newTrack);
         }
     }

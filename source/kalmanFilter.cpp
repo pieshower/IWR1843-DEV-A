@@ -6,11 +6,10 @@
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-void kalmanFilter::init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
-    X = x_in;
+void kalmanFilter::init(VectorXd &X_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
+    X = X_in;
     P = P_in;
     F = F_in;
-
     H = H_in;
     R = R_in;
     Q = Q_in;
