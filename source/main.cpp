@@ -4,6 +4,8 @@
 #include <unistd.h>
 
 #include "../include/mmWaveRadar.h"
+#include "../include/kalmanFilter.h"
+#include "../include/targetObject.h"
 
 int main() {
 

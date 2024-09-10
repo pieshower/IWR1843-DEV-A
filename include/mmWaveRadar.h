@@ -6,8 +6,6 @@
 #include <serial/serial.h>
 #include <eigen3/Eigen/Dense>
 
-#include "../include/targetObject.h"
-
 #define MAX_BUFFER_SIZE 4096
 #define HEADER_SIZE_IN_BYTES 40
 #define MAX_BUFFERED_FRAMES_SIZE 10

@@ -23,6 +23,6 @@ public:
     void processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects);
 };
 
-std::vector<targetObject> trackers;
+static std::vector<targetObject> trackers;
 
 #endif

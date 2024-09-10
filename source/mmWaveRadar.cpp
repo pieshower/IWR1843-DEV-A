@@ -1,8 +1,8 @@
 #include <iomanip>
 #include <boost/asio.hpp>
 
-#include "mmWaveRadar.h"
-#include "iwr1843Config.h"
+#include "../include/mmWaveRadar.h"
+#include "../include/iwr1843Config.h"
 
 
 void mmWaveRadar::configure(const char* configCommands[], const unsigned long configSize) {
