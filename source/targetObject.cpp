@@ -29,6 +29,8 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
         for (targetObject &tracked : trackers) {
             if (sameObject(tracked, obj)) {
                 tracked.kalFil.update(obj.spherVector);
+            }
+            else {
                 isNewObeject = true;
                 break;
             }
