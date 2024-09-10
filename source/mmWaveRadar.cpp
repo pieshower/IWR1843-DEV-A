@@ -4,6 +4,7 @@
 #include "../include/mmWaveRadar.h"
 #include "../include/iwr1843Config.h"
 
+int frameCount = 0;
 
 void mmWaveRadar::configure(const char* configCommands[], const unsigned long configSize) {
     if (!userPort_error) {
@@ -170,37 +171,21 @@ void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detect
     }
 }
 
-// void mmWaveRadar::updateDataComplete(std::vector<data_complete_t> &_dataComplete_v, data_complete_t &_dataComplete) {
-//     _dataComplete_v.push_back(_dataComplete);
-//     int num = 1;
-//     for (detected_object_t i : _dataComplete.detectedObjects) {
-//         std::cout << "Object " << num << ":" << std::endl;
-//         std::cout << "x: " << i.x << std::endl;
-//         std::cout << "y: " << i.y << std::endl;
-//         std::cout << "z: " << i.z << std::endl;
-//         std::cout << "velocity: " << i.velocity << std::endl << std::endl;
-//         num++;
-//     }
-//     _dataComplete.detectedObjects.clear();
-//     if (_dataComplete_v.size() >= MAX_BUFFERED_COMPLETE_DATA) {
-//         _dataComplete_v.clear();
-//     }
-// }
-
 void mmWaveRadar::updateDataComplete(data_complete_t &_dataComplete, data_header_t &_dataHeader, data_tl_t &_dataTL, std::vector<detected_object_t> &_detectedObjects) {
     _dataComplete.dataHeader = _dataHeader;
     _dataComplete.dataTL = _dataTL;
     _dataComplete.detectedObjects = _detectedObjects;
 
-    int num = 1;
-    for (detected_object_t i : _dataComplete.detectedObjects) {
-        std::cout << "Object " << num << ":" << std::endl;
-        std::cout << "x: " << i.x << std::endl;
-        std::cout << "y: " << i.y << std::endl;
-        std::cout << "z: " << i.z << std::endl;
-        std::cout << "velocity: " << i.velocity << std::endl << std::endl;
-        num++;
-    }
+    // int num = 1;
+    // std::cout << "Frame Count: " << frameCount++ << std::endl;
+    // for (detected_object_t i : _dataComplete.detectedObjects) {
+    //     std::cout << "Object " << num << ":" << std::endl;
+    //     std::cout << "x: " << i.x << std::endl;
+    //     std::cout << "y: " << i.y << std::endl;
+    //     std::cout << "z: " << i.z << std::endl;
+    //     std::cout << "velocity: " << i.velocity << std::endl << std::endl;
+    //     num++;
+    // }
 }
 
 void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {
