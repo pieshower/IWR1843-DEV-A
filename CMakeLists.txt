@@ -16,8 +16,8 @@ add_executable(
     radar-tracking #EXE Name
     source/main.cpp
     source/mmWaveRadar.cpp
-    source/KalmanFilter.cpp
-    source/TargetObject.cpp
+    source/kalmanFilter.cpp
+    source/targetObject.cpp
 )
 
 target_link_libraries(radar-tracking ${PCL_LIBRARIES} ${serial_LIBRARIES})

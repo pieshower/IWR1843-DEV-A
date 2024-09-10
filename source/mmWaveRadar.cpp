@@ -1,15 +1,8 @@
 #include <iomanip>
 #include <boost/asio.hpp>
 
-#include "../include/mmWaveRadar.h"
-#include "../include/iwr1843Config.h"
-
-
-// std::string userPort_s = "/dev/ttyACM2";
-// std::string dataPort_s = "/dev/ttyACM3";
-
-// int userPort_baud = 115200;
-// int dataPort_baud = 921600;
+#include "mmWaveRadar.h"
+#include "iwr1843Config.h"
 
 
 void mmWaveRadar::configure(const char* configCommands[], const unsigned long configSize) {
@@ -222,10 +215,19 @@ void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {
     float vy = velocity * (y / magnitude);
     float vz = velocity * (z / magnitude);
 
-    _detectedObject.objectVector[0] = x;
-    _detectedObject.objectVector[1] = y;
-    _detectedObject.objectVector[2] = z;
-    _detectedObject.objectVector[3] = vx;
-    _detectedObject.objectVector[4] = vy;
-    _detectedObject.objectVector[5] = vz;
+    float rho = sqrt(x * x + y * y + z * z);
+    float theta = atan(y / x);
+    
+    if (rho < 0.0001) { rho = 0.0001; }
+
+    float phi = acos(z / rho);
+    float rho_dot_p = (x * x + y * y + z * z) / rho;
+
+    VectorXd newStateVector = VectorXd(6);
+    newStateVector << x, y, z, vx, vy, vz;
+    _detectedObject.stateVector = newStateVector;
+
+    VectorXd newSpherVector = VectorXd(4);
+    newSpherVector << rho, theta, phi, rho_dot_p;
+    _detectedObject.spherVector = newSpherVector;
 }
