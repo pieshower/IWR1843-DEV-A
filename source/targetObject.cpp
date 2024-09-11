@@ -27,21 +27,22 @@ float targetObject::calculateDistance(const targetObject &tracker, const detecte
 
 void targetObject::processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects) {
     for (const detected_object_t &object : _detectedObjects) {
-        bool isNewObeject = false;
+        bool isNewObject = false;
         for (targetObject &tracker : trackers) {
             if (sameObject(tracker, object)) {
                 tracker.kalFil.update(object.spherVector);
                 tracker.trackedObject = object;
             }
             else {
-                isNewObeject = true;
+                isNewObject = true;
                 break;
             }
         }
-        if (isNewObeject) {
+        if (isNewObject) {
             kalmanFilter newFilter;
             newFilter.init(object.stateVector, P_, F_, H_, R_, Q_);
             targetObject newTrack(newFilter, object);
+            newTrack.initialized = true;
             trackers.push_back(newTrack);
         }
     }
