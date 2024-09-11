@@ -7,14 +7,15 @@
 #include "../include/mmWaveRadar.h"
 #include "../include/targetObject.h"
 
-void radar_Loop() {
+void radarLoop() {
+    mmWaveRadar::getRadarGuy().start();
     while (true) {
         mmWaveRadar::getRadarGuy().read();
         usleep(250000);
     }
 }
 
-void targetLoop() {
+void trackLoop() {
     while (true) {
         for (targetObject &tracker : trackers) {
             tracker.processDetectedObjects(detectedObjects);
@@ -24,11 +25,8 @@ void targetLoop() {
 }
 
 int main() {
-    mmWaveRadar::getRadarGuy().start();
-    sleep(2);
-
-    std::thread radar_(radar_Loop);
-    std::thread target(targetLoop);
+    std::thread radar_(radarLoop);
+    std::thread target(trackLoop);
 
     radar_.detach();
     target.detach();
