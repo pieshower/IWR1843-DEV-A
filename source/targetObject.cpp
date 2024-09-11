@@ -28,10 +28,10 @@ float targetObject::calculateDistance(const targetObject &tracked, const detecte
 void targetObject::processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects) {
     for (const detected_object_t &object : _detectedObjects) {
         bool isNewObeject = false;
-        for (targetObject &tracked : trackers) {
-            if (sameObject(tracked, object)) {
-                tracked.kalFil.update(object.spherVector);
-                tracked.trackedObject = object;
+        for (targetObject &tracker : trackers) {
+            if (sameObject(tracker, object)) {
+                tracker.kalFil.update(object.spherVector);
+                tracker.trackedObject = object;
             }
             else {
                 isNewObeject = true;

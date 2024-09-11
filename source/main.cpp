@@ -36,8 +36,8 @@ void radar_Loop() {
 
 void targetLoop() {
     while (true) {
-        for (targetObject &tracked : trackers) {
-            tracked.processDetectedObjects(detectedObjects);
+        for (targetObject &tracker : trackers) {
+            tracker.processDetectedObjects(detectedObjects);
         }
         sleep(1);
     }
