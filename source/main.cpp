@@ -18,11 +18,8 @@ void radarLoop();
 // std::thread radar(radarLoop);
 
 int main() {
-    // mmWaveRadar::getRadarGuy().start();
-    // sleep(2);
-
-    std::default_random_engine num_gen;
-    std::uniform_int_distribution<int> dist(1, 5);
+    mmWaveRadar::getRadarGuy().start();
+    sleep(2);
 
     // radar.join();
 
