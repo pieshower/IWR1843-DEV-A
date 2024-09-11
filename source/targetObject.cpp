@@ -45,4 +45,5 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
             trackers.push_back(newTrack);
         }
     }
+
 }

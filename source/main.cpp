@@ -3,36 +3,42 @@
 #include <serial/serial.h>
 #include <unistd.h>
 #include <thread>
-#include <random>
-#include <chrono>
-
-#include <pcl/point_types.h>
-#include <pcl/visualization/cloud_viewer.h>
-#include <pcl/io/pcd_io.h>
 
 #include "../include/mmWaveRadar.h"
 #include "../include/targetObject.h"
 
-void radarLoop();
 
-// std::thread radar(radarLoop);
+void radar_Loop();
+void targetLoop();
+
 
 int main() {
     mmWaveRadar::getRadarGuy().start();
     sleep(2);
 
-    // radar.join();
+    std::thread radar_(radar_Loop);
+    std::thread target(targetLoop);
+
+    radar_.detach();
+    target.detach();
+
+    while (true);
 
     return 0;
 }
 
-void radarLoop() {
+void radar_Loop() {
     while (true) {
         mmWaveRadar::getRadarGuy().read();
-        sleep(1);
+        usleep(250000);
     }
 }
 
 void targetLoop() {
-
+    while (true) {
+        for (targetObject &tracked : trackers) {
+            tracked.processDetectedObjects(detectedObjects);
+        }
+        sleep(1);
+    }
 }

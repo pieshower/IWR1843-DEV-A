@@ -9,6 +9,8 @@ class targetObject {
 private:
     kalmanFilter kalFil;
     detected_object_t trackedObject;
+
+    mmWaveRadar& radar = mmWaveRadar::getRadarGuy(); 
     
     float distanceThreshold = 0.5;
     bool initialized = false;
