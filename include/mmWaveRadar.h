@@ -51,9 +51,9 @@ private:
     
     int userBaud = 115200;
     int dataBaud = 921600;
-    
-    std::string userPort_s = "/dev/ttyACM0";
-    std::string dataPort_s = "/dev/ttyACM1";
+
+    std::string userPort_s = "/dev/ttyACM2";
+    std::string dataPort_s = "/dev/ttyACM3";
     
     bool userPort_error = false;
     bool dataPort_error = false;

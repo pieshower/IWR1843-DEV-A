@@ -176,16 +176,16 @@ void mmWaveRadar::updateDataComplete(data_complete_t &_dataComplete, data_header
     _dataComplete.dataTL = _dataTL;
     _dataComplete.detectedObjects = _detectedObjects;
 
-    // int num = 1;
-    // std::cout << "Frame Count: " << frameCount++ << std::endl;
-    // for (detected_object_t i : _dataComplete.detectedObjects) {
-    //     std::cout << "Object " << num << ":" << std::endl;
-    //     std::cout << "x: " << i.x << std::endl;
-    //     std::cout << "y: " << i.y << std::endl;
-    //     std::cout << "z: " << i.z << std::endl;
-    //     std::cout << "velocity: " << i.velocity << std::endl << std::endl;
-    //     num++;
-    // }
+    int num = 1;
+    std::cout << "Frame Count: " << frameCount++ << std::endl;
+    for (detected_object_t i : _dataComplete.detectedObjects) {
+        std::cout << "Object " << num << ":" << std::endl;
+        std::cout << "x: " << i.x << std::endl;
+        std::cout << "y: " << i.y << std::endl;
+        std::cout << "z: " << i.z << std::endl;
+        std::cout << "velocity: " << i.velocity << std::endl << std::endl;
+        num++;
+    }
 }
 
 void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {

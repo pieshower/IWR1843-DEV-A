@@ -4,6 +4,7 @@
 targetObject::targetObject(kalmanFilter _kf, detected_object_t _trackedObject) {
     kalFil = _kf;
     trackedObject = _trackedObject;
+    initKalmanVariables();
 }
 
 bool targetObject::sameObject(const targetObject &tracked, const detected_object_t &_detectedObject) {
