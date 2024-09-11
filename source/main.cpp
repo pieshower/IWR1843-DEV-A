@@ -25,11 +25,11 @@ void trackLoop() {
 }
 
 int main() {
-    std::thread radar_(radarLoop);
-    std::thread target(trackLoop);
+    std::thread radar(radarLoop);
+    std::thread track(trackLoop);
 
-    radar_.detach();
-    target.detach();
+    radar.detach();
+    track.detach();
 
     while (true);
 
