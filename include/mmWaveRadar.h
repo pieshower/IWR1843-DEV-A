@@ -52,8 +52,8 @@ private:
     int userBaud = 115200;
     int dataBaud = 921600;
 
-    std::string userPort_s = "/dev/ttyACM2";
-    std::string dataPort_s = "/dev/ttyACM3";
+    std::string userPort_s = "/dev/ttyACM0";
+    std::string dataPort_s = "/dev/ttyACM1";
     
     bool userPort_error = false;
     bool dataPort_error = false;
@@ -62,7 +62,7 @@ private:
 
      mmWaveRadar() { connectPort(); }
     ~mmWaveRadar() { delete &RadarGuy; }
-
+    
     void configure(const char* configCommands[], const unsigned long configSize);
     void connectPort();
 
@@ -78,22 +78,21 @@ private:
 
     std::vector<uint8_t> frame;
     std::vector<std::vector<uint8_t>> frames;
-    data_header_t dataHeader;
-    data_tl_t dataTL;
-    detected_object_t detectedObject;
-    std::vector<detected_object_t> detectedObjects;
 
 public:
     static mmWaveRadar& getRadarGuy() { return RadarGuy; }
 
     void start();
     void  stop();
-    
     void read();
-
-    data_complete_t dataComplete;
 };
 
 inline mmWaveRadar mmWaveRadar::RadarGuy;
+
+static data_header_t dataHeader;
+static data_tl_t dataTL;
+static detected_object_t detectedObject;
+static data_complete_t dataComplete;
+static std::vector<detected_object_t> detectedObjects;
 
 #endif

@@ -1,4 +1,3 @@
-
 #include "../include/kalmanFilter.h"
 
 #define PI 3.14159265
@@ -72,10 +71,3 @@ void kalmanFilter::update(const VectorXd &z) {
     MatrixXd I = MatrixXd::Identity(x_size, x_size);
     P = (I - K * H) * P;
 }
-
-
-
-
-
-
-
