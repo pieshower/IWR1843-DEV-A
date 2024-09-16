@@ -9,14 +9,14 @@ int frameCount = 0;
 void mmWaveRadar::configure(const char* configCommands[], const unsigned long configSize) {
     if (!userPort_error) {
         std::string command = configDataPort + "\r\n";
-        userPort.write(command);
+        userPort.Write(command);
         usleep(10000);
         command = sensorStop + "\r\n";
-        dataPort.write(command);
+        userPort.Write(command);
         usleep(10000);
         for (unsigned long i = 0; i < configSize; i++) {
             command = std::string(configCommands[i]) + "\r\n";
-            userPort.write(command);
+            userPort.Write(command);
             usleep(10000);
         }
         std::cout << "mmWaveRadar should be configured..." << std::endl;
@@ -28,21 +28,19 @@ void mmWaveRadar::configure(const char* configCommands[], const unsigned long co
 
 void mmWaveRadar::connectPort() {
     try {
-        userPort.setPort(userPort_s);
-        userPort.setBaudrate(userBaud);
-        userPort.open();
+        userPort.Open(userPort_s);
+        userPort.SetBaudRate(LibSerial::BaudRate::BAUD_115200);
     } 
-    catch (serial::IOException &e) {
+    catch (LibSerial::OpenFailed &e) {
         std::cerr << "unable to open user port" << std::endl;
         userPort_error = true;
     }
 
     try {
-        dataPort.setPort(dataPort_s);
-        dataPort.setBaudrate(dataBaud);
-        dataPort.open();
+        dataPort.Open(dataPort_s);
+        dataPort.SetBaudRate(LibSerial::BaudRate::BAUD_921600);
     } 
-    catch (serial::IOException &e) {
+    catch (LibSerial::OpenFailed &e) {
         std::cerr << "unable to open data port" << std::endl;
         dataPort_error = true;
     }
@@ -51,14 +49,14 @@ void mmWaveRadar::connectPort() {
 void mmWaveRadar::start() {
     configure(iwr1843ConfigCommands, configCommandsSize);
     std::string command = sensorStart + "\r\n";
-    userPort.write(command);
+    userPort.Write(command);
     usleep(10000);
     std::cout << "Starting mmWaveRadar..." << std::endl;
 }
 
 void mmWaveRadar::stop() {
     std::string command = sensorStop + "\r\n";
-    userPort.write(command);
+    userPort.Write(command);
     usleep(10000);
     std::cout << "Stopping mmWaveRadar..." << std::endl;
 }
@@ -67,9 +65,9 @@ void mmWaveRadar::read() {
     std::vector<uint8_t> buf;
 
     do {
-        while (dataPort.available() && buf.size() < MAX_BUFFER_SIZE) {
+        while (dataPort.IsDataAvailable() && buf.size() < MAX_BUFFER_SIZE) {
             uint8_t byte;
-            dataPort.read(&byte, 1);
+            dataPort.ReadByte(byte);
             buf.push_back(byte);
         }
         parseFrames(buf, frame, frames);
@@ -107,7 +105,7 @@ void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
     parseFrameHeader(_frame, dataHeader);
     parseFrameTL(_frame, dataTL);
     parseFrameDetectedObjects(_frame, detectedObject, detectedObjects);
-    // updateDataComplete(dataComplete, dataHeader, dataTL, detectedObjects);
+    updateDataComplete(dataComplete, dataHeader, dataTL, detectedObjects);
 }
 
 void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader) {

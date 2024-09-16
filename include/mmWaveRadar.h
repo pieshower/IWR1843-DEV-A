@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <unistd.h>
-#include <serial/serial.h>
+#include <libserial/SerialPort.h>
 #include <eigen3/Eigen/Dense>
+
 
 #define MAX_BUFFER_SIZE 4096
 #define HEADER_SIZE_IN_BYTES 40
@@ -46,11 +47,14 @@ typedef struct data_complete_t {
 
 class mmWaveRadar {
 private:
-    serial::Serial userPort;
-    serial::Serial dataPort;
+    // serial::Serial userPort;
+    // serial::Serial dataPort;
+
+    LibSerial::SerialPort userPort;
+    LibSerial::SerialPort dataPort;
     
-    int userBaud = 115200;
-    int dataBaud = 921600;
+    // int userBaud = 115200;
+    // int dataBaud = 921600;
 
     std::string userPort_s = "/dev/ttyACM0";
     std::string dataPort_s = "/dev/ttyACM1";
