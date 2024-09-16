@@ -47,14 +47,8 @@ typedef struct data_complete_t {
 
 class mmWaveRadar {
 private:
-    // serial::Serial userPort;
-    // serial::Serial dataPort;
-
     LibSerial::SerialPort userPort;
     LibSerial::SerialPort dataPort;
-    
-    // int userBaud = 115200;
-    // int dataBaud = 921600;
 
     std::string userPort_s = "/dev/ttyACM0";
     std::string dataPort_s = "/dev/ttyACM1";
