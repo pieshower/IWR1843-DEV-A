@@ -2,8 +2,18 @@
 
 #include "../include/mmWaveRadar.h"
 #include "../include/iwr1843Config.h"
+#include "../include/kalmanFilter_init.h"
 
-int frameCount = 0;
+data_header_t dataHeader;
+data_tl_t dataTL;
+detected_object_t detectedObject;
+std::vector<detected_object_t> detectedObjects;
+data_complete_t dataComplete;
+
+mmWaveRadar::mmWaveRadar() {
+    initKalmanVariables();
+    connectPort();
+}
 
 void mmWaveRadar::configure(const char* configCommands[], const unsigned long configSize) {
     if (!userPort_error) {
@@ -68,11 +78,16 @@ void mmWaveRadar::read() {
             uint8_t byte;
             dataPort.ReadByte(byte);
             buf.push_back(byte);
+            // std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
         parseFrames(buf, frame, frames);
     } while (frames.size() < MAX_BUFFERED_FRAMES_SIZE);
     
     for (std::vector<uint8_t> &i : frames) {
+        // for (size_t j = 0; j < i.size(); ++j) {
+        //     std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i[j]) << " ";
+        //     if ((j + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
+        // }
         parseFrame(i);
     }
     // std::cout << "number of recorded frames before clearing: " << frames.size() << std::endl;
@@ -101,10 +116,15 @@ void mmWaveRadar::parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &
 }
 
 void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
+    // std::cout << std::endl << std::dec;
     parseFrameHeader(_frame, dataHeader);
+    // std::cout << "current frame (" << _frame.size() << " size):" << std::endl;
+    // std::cout << "Actual parsed packet length: " << dataHeader.totalPacketLen << std::endl;
+    // std::cout << "current number of objects detected: " << dataHeader.numDetectedObj << std::endl;
     parseFrameTL(_frame, dataTL);
+    // std::cout << "current number tlv length: " << dataTL.length << std::endl << std::endl;
     parseFrameDetectedObjects(_frame, detectedObject, detectedObjects);
-    updateDataComplete(dataComplete, dataHeader, dataTL, detectedObjects);
+    // updateDataComplete(dataComplete, dataHeader, dataTL, detectedObjects);
 }
 
 void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader) {
@@ -137,27 +157,32 @@ void mmWaveRadar::parseFrameTL(std::vector<uint8_t> &_frame, data_tl_t &_dataTL)
     }
 }
 
-void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t _detectedObject, std::vector<detected_object_t> &_detectedObjects) {
+void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detected_object_t &_detectedObject, std::vector<detected_object_t> &_detectedObjects) {
     uint8_t detectedObject_i = 0;
 
     _detectedObjects.clear();
 
-    for (size_t i = sizeof(data_header_t) + sizeof(data_tl_t); i + 3 < _frame.size() && i < sizeof(data_header_t) + sizeof(data_tl_t) + dataTL.length; i += 4) {
-        float temp;
-        uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
-        std::memcpy(&temp, &doubleword, sizeof(float));
-        switch (detectedObject_i) {
-            case 0: _detectedObject.x = temp; break;
-            case 1: _detectedObject.y = temp; break;
-            case 2: _detectedObject.z = temp; break;
-            case 3: _detectedObject.velocity = temp; break;
+    if (dataTL.type == message_type_e::MSG_DETECTED_POINTS) {
+        for (size_t i = sizeof(data_header_t) + sizeof(data_tl_t); i + 3 < _frame.size() && i < sizeof(data_header_t) + sizeof(data_tl_t) + dataTL.length; i += 4) {
+            float temp;
+            uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);
+            std::memcpy(&temp, &doubleword, sizeof(float));
+            switch (detectedObject_i) {
+                case 0: _detectedObject.x = temp; break;
+                case 1: _detectedObject.y = temp; break;
+                case 2: _detectedObject.z = temp; break;
+                case 3: _detectedObject.velocity = temp; break;
+            }
+            detectedObject_i++;
+            if (detectedObject_i > 3) {
+                convertToVector(_detectedObject);
+                _detectedObjects.push_back(_detectedObject);
+                detectedObject_i = 0;
+            }
         }
-        detectedObject_i++;
-        if (detectedObject_i > 3) {
-            convertToVector(_detectedObject);
-            _detectedObjects.push_back(_detectedObject);
-            detectedObject_i = 0;
-        }
+    }
+    else {
+        std::cout << "No detected objects.." << std::endl;
     }
 
     while (_detectedObjects.size() > MAX_DETECTED_OBJECTS) {
@@ -171,7 +196,7 @@ void mmWaveRadar::updateDataComplete(data_complete_t &_dataComplete, data_header
     _dataComplete.detectedObjects = _detectedObjects;
 
     int num = 1;
-    std::cout << "Frame Count: " << frameCount++ << std::endl;
+    // std::cout << "Frame Count: " << frameCount++ << std::endl;
     for (detected_object_t i : _dataComplete.detectedObjects) {
         std::cout << "Object " << num << ":" << std::endl;
         std::cout << "x: " << i.x << std::endl;

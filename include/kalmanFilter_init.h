@@ -9,15 +9,22 @@
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-VectorXd X_ = VectorXd(STATE_DIM); // current state
-MatrixXd P_ = MatrixXd(STATE_DIM, STATE_DIM); // covariance matrix
-MatrixXd F_ = MatrixXd(STATE_DIM, STATE_DIM); // transition matrix
+inline VectorXd X_; // current state
+inline MatrixXd P_; // covariance matrix
+inline MatrixXd F_; // transition matrix
 
-MatrixXd Q_ = MatrixXd(STATE_DIM, STATE_DIM); // process covariance matrix
-MatrixXd H_ = MatrixXd(STATE_DIM, MEASR_DIM); // measurement matrix
-MatrixXd R_ = MatrixXd(MEASR_DIM, MEASR_DIM); // measurement covariance matrix
+inline MatrixXd Q_; // process covariance matrix
+inline MatrixXd H_; // measurement matrix
+inline MatrixXd R_; // measurement covariance matrix
 
-void initKalmanVariables() {
+inline void initKalmanVariables() {
+    X_ = VectorXd(STATE_DIM);
+    P_ = MatrixXd(STATE_DIM, STATE_DIM);
+    F_ = MatrixXd(STATE_DIM, STATE_DIM);
+    Q_ = MatrixXd(STATE_DIM, STATE_DIM);
+    H_ = MatrixXd(STATE_DIM, MEASR_DIM);
+    R_ = MatrixXd(MEASR_DIM, MEASR_DIM);    
+    
     X_ << 1, 1, 0, 0, 0, 0;
 
     P_ << 1, 0, 0, 0, 0, 0, 
