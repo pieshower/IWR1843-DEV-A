@@ -1,6 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <serial/serial.h>
 #include <unistd.h>
 #include <thread>
 
