@@ -19,10 +19,10 @@ void mmWaveRadar::configure(const char* configCommands[], const unsigned long co
     if (!userPort_error) {
         std::string command = configDataPort + "\r\n";
         userPort.Write(command);
-        usleep(10000);
+        usleep(100000);
         command = sensorStop + "\r\n";
         userPort.Write(command);
-        usleep(10000);
+        usleep(100000);
         for (unsigned long i = 0; i < configSize; i++) {
             command = std::string(configCommands[i]) + "\r\n";
             userPort.Write(command);
