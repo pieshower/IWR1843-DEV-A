@@ -18,6 +18,7 @@ add_executable(
     radar-tracking #EXE Name
     source/main.cpp
     source/mmWaveRadar.cpp
+    source/mmWaveRadar_imp.cpp
     source/kalmanFilter.cpp
     source/targetObject.cpp
     source/visualizer.cpp
