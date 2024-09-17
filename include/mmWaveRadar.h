@@ -19,7 +19,7 @@ private:
     static mmWaveRadar RadarGuy;
 
      mmWaveRadar();
-    ~mmWaveRadar() { delete &RadarGuy; }
+    ~mmWaveRadar() = default;
     
     void configure(const char* configCommands[], const unsigned long configSize);
     void connectPort();

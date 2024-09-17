@@ -9,13 +9,13 @@
 
 class visualizer {
 private:
-    boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer{new pcl::visualization::PCLVisualizer("PCL Visualizer")};
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud{new pcl::PointCloud<pcl::PointXYZ>()};
+    boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
 
     static visualizer VisualizerGuy;
 
-     visualizer() {}
-    ~visualizer() { delete &VisualizerGuy; }
+     visualizer();
+    ~visualizer() = default;
 
     const double target_fps = 60;
     const double frame_duration = 1.0 / target_fps;
@@ -25,6 +25,7 @@ private:
 
 public:
     static visualizer& getVisualizerGuy() { return VisualizerGuy; }
+    bool hasClosed();
     void update();
 };
 
