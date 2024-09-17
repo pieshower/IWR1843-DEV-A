@@ -10,7 +10,7 @@ find_package(PCL REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 
-set(LIBSERIAL_INCLUDE_DIR "/usr/local/include")
+set(LIBSERIAL_INCLUDE_DIR "/usr/local/include/libserial")
 set(LIBSERIAL_LIBRARY "/usr/local/lib/libserial.so")
 include_directories(${LIBSERIAL_INCLUDE_DIR})
 

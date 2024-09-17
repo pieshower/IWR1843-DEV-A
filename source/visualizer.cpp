@@ -38,7 +38,7 @@ void visualizer::update() {
         mtx.unlock();
     }
 
-    viewer->updatePointCloud<pcl::PointXYZ>(cloud);     
+    viewer->updatePointCloud<pcl::PointXYZ>(cloud);  
     viewer->spinOnce(1, true);
 
     auto end_time = std::chrono::high_resolution_clock::now();
