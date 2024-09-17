@@ -3,6 +3,8 @@
 #include "../include/visualizer.h"
 
 void radarLoop() {
+    mmWaveRadar::getRadarGuy().start();
+    sleep(1);
     while (true) {
         if (mtx.try_lock()) {
             mmWaveRadar::getRadarGuy().read();
@@ -24,13 +26,11 @@ void trackLoop() {
 }
 
 int main() {
-    mmWaveRadar::getRadarGuy().start();
-    sleep(1);
-    
-    std::thread radar(radarLoop);
+     std::thread radar(radarLoop);
     // std::thread track(trackLoop);
 
     radar.detach();
+    // track.detach();
 
     while (!visualizer::getVisualizerGuy().hasClosed()) {
         visualizer::getVisualizerGuy().update();
