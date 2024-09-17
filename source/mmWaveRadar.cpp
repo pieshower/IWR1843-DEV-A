@@ -1,5 +1,3 @@
-#include <iomanip>
-
 #include "../include/mmWaveRadar.h"
 #include "../include/iwr1843Config.h"
 #include "../include/kalmanFilter_init.h"
@@ -9,6 +7,8 @@ data_tl_t dataTL;
 detected_object_t detectedObject;
 std::vector<detected_object_t> detectedObjects;
 data_complete_t dataComplete;
+
+std::mutex mtx;
 
 mmWaveRadar::mmWaveRadar() {
     initKalmanVariables();
@@ -73,24 +73,16 @@ void mmWaveRadar::stop() {
 void mmWaveRadar::read() {
     std::vector<uint8_t> buf;
 
-    do {
-        while (dataPort.IsDataAvailable() && buf.size() < MAX_BUFFER_SIZE) {
-            uint8_t byte;
-            dataPort.ReadByte(byte);
-            buf.push_back(byte);
-            // std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        }
-        parseFrames(buf, frame, frames);
-    } while (frames.size() < MAX_BUFFERED_FRAMES_SIZE);
-    
-    for (std::vector<uint8_t> &i : frames) {
-        // for (size_t j = 0; j < i.size(); ++j) {
-        //     std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i[j]) << " ";
-        //     if ((j + 1) % 16 == 0) std::cout << std::endl; // New line every 16 bytes for better readability
-        // }
-        parseFrame(i);
+    while (buf.size() < MAX_BUFFER_SIZE) {
+        uint8_t byte;
+        dataPort.ReadByte(byte);
+        buf.push_back(byte);
     }
-    // std::cout << "number of recorded frames before clearing: " << frames.size() << std::endl;
+    parseFrames(buf, frame, frames);
+
+    for (std::vector<uint8_t> &_frame : frames) {
+        parseFrame(_frame);
+    }
     frames.clear();
 }
 
@@ -183,6 +175,7 @@ void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detect
     }
     else {
         std::cout << "No detected objects.." << std::endl;
+        return;
     }
 
     while (_detectedObjects.size() > MAX_DETECTED_OBJECTS) {

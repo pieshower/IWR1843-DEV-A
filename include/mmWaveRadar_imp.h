@@ -2,9 +2,17 @@
 #define MMWAVERADAR_IMP_H
 
 #include <eigen3/Eigen/Dense>
+#include <iostream>
+#include <unistd.h>
 #include <iomanip>
+#include <thread>
+#include <mutex>
 
-using Eigen::VectorXd;
+#define MAX_BUFFER_SIZE 2048
+#define HEADER_SIZE_IN_BYTES 40
+#define MAX_BUFFERED_FRAMES_SIZE 10
+#define MAX_BUFFERED_COMPLETE_DATA 10
+#define MAX_DETECTED_OBJECTS 15
 
 enum message_type_e {
     MSG_DETECTED_POINTS = 1,
@@ -39,8 +47,8 @@ typedef struct data_tl_t {
 typedef struct detected_object_t {
     float x, y, z;
     float velocity;
-    VectorXd stateVector;
-    VectorXd spherVector;
+    Eigen::VectorXd stateVector;
+    Eigen::VectorXd spherVector;
 } detected_object_t;
 
 typedef struct data_complete_t {
@@ -54,5 +62,7 @@ extern data_tl_t dataTL;
 extern detected_object_t detectedObject;
 extern std::vector<detected_object_t> detectedObjects;
 extern data_complete_t dataComplete;
+
+extern std::mutex mtx;
 
 #endif

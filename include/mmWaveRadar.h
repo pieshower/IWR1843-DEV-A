@@ -1,17 +1,9 @@
 #ifndef mmWaveRadar_H
 #define mmWaveRadar_H
 
-#include <iostream>
-#include <unistd.h>
 #include <libserial/SerialPort.h>
 
 #include "../include/mmWaveRadar_imp.h"
-
-#define MAX_BUFFER_SIZE 4096
-#define HEADER_SIZE_IN_BYTES 40
-#define MAX_BUFFERED_FRAMES_SIZE 10
-#define MAX_BUFFERED_COMPLETE_DATA 10
-#define MAX_DETECTED_OBJECTS 15
 
 class mmWaveRadar {
 private:
