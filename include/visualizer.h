@@ -20,8 +20,12 @@ private:
     const double target_fps = 60;
     const double frame_duration = 1.0 / target_fps;
 
+    std::string numObjectID = "object";
+    std::string previousNumObjects;
+
     void setup();
     void addDetectedObjectsToPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr &_cloud, std::vector<detected_object_t> &_detectedObjects);
+    void updateText(std::vector<detected_object_t> &_detectedObjects);
 
 public:
     static visualizer& getVisualizerGuy() { return VisualizerGuy; }

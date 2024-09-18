@@ -10,7 +10,7 @@ void radarLoop() {
             mmWaveRadar::getRadarGuy().read();
             mtx.unlock();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
