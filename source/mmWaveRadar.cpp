@@ -148,6 +148,7 @@ void mmWaveRadar::parseFrameDetectedObjects(std::vector<uint8_t> &_frame, detect
     _detectedObjects.clear();
 
     if (dataTL.type == message_type_e::MSG_DETECTED_POINTS) {
+        std::cout << "msg detected points" << std::endl;
         for (size_t i = sizeof(data_header_t) + sizeof(data_tl_t); i + 3 < _frame.size() && i < sizeof(data_header_t) + sizeof(data_tl_t) + dataTL.length; i += 4) {
             float temp;
             uint32_t doubleword = (_frame[i + 3] << 24) | (_frame[i + 2] << 16) | (_frame[i + 1] << 8) | (_frame[i]);

@@ -10,7 +10,8 @@
 class visualizer {
 private:
     boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer;
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr detectedCloud;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr trackedCloud;
 
     static visualizer VisualizerGuy;
 
@@ -24,7 +25,8 @@ private:
     std::string previousNumObjects;
 
     void setup();
-    void addDetectedObjectsToPointCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr &_cloud, std::vector<detected_object_t> &_detectedObjects);
+    void addDetectedObjectsToPointCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &_detectedCloud, std::vector<detected_object_t> &_detectedObjects);
+    void addTrackedObjectsToPointClout(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &_trackedCloud, detected_object_t &_trackedObject);
     void updateText(std::vector<detected_object_t> &_detectedObjects);
 
 public:

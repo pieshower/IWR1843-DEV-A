@@ -65,4 +65,6 @@ extern data_complete_t dataComplete;
 
 extern std::mutex mtx;
 
+float PackRGB(uint8_t r, uint8_t g, uint8_t b);
+
 #endif
