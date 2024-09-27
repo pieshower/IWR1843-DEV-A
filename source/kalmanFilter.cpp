@@ -21,12 +21,12 @@ void kalmanFilter::predict() {
 }
 
 void kalmanFilter::update(const VectorXd &z) {
-    float px = X[0];
-    float py = X[1];
-    float pz = X[2];
-    float vx = X[3];
-    float vy = X[4];
-    float vz = X[5];
+    float px = X(0);
+    float py = X(1);
+    float pz = X(2);
+    float vx = X(3);
+    float vy = X(4);
+    float vz = X(5);
 
     float rho = sqrt(px * px + py * py + pz * pz);
     float theta = atan(py / px);

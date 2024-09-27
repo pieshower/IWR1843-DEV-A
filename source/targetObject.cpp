@@ -25,12 +25,20 @@ float targetObject::calculateDistance(const targetObject &tracker, const detecte
 }
 
 void targetObject::processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects) {
+    bool isNewObject = false;
+
+    // if (trackers.size() <= 1) {
+    //     isNewObject = true;
+    // }
+    
     for (const detected_object_t &object : _detectedObjects) {
-        bool isNewObject = false;
+        std::cout << "parsing object to be tragets" << std::endl;
         for (targetObject &tracker : trackers) {
+            std::cout << "checking objects to target" << std::endl;
             if (sameObject(tracker, object)) {
                 tracker.kalFil.update(object.spherVector);
                 tracker.trackedObject = object;
+                std::cout << "same object detected" << std::endl;
             }
             else {
                 isNewObject = true;
@@ -38,11 +46,20 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
             }
         }
         if (isNewObject) {
+            std::cout << "new object detected" << std::endl;
             kalmanFilter newFilter;
             newFilter.init(object.stateVector, P_, F_, H_, R_, Q_);
-            targetObject newTrack(newFilter, object);
-            newTrack.initialized = true;
+            std::cout << "made is past new filter init" << std::endl;
+            targetObject newTrack;
+            std::cout << "made it past new track" << std::endl;
+            // newTrack.initialized = true;
+            // std::cout << "made it past new track init true" << std::endl;         
             trackers.push_back(newTrack);
+            std::cout << "made it pash trackers push back new track" << std::endl;
         }
     }
+}
+
+detected_object_t targetObject::getObjectTargeted() {
+    return trackedObject;
 }

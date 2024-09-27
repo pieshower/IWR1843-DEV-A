@@ -8,6 +8,9 @@
 #include <thread>
 #include <mutex>
 
+#define STATE_DIM 6
+#define SPHER_DIM 4
+
 #define MAX_BUFFER_SIZE 2048
 #define HEADER_SIZE_IN_BYTES 40
 #define MAX_BUFFERED_FRAMES_SIZE 10
@@ -47,8 +50,8 @@ typedef struct data_tl_t {
 typedef struct detected_object_t {
     float x, y, z;
     float velocity;
-    Eigen::VectorXd stateVector;
-    Eigen::VectorXd spherVector;
+    Eigen::VectorXd stateVector = Eigen::VectorXd(STATE_DIM);
+    Eigen::VectorXd spherVector = Eigen::VectorXd(SPHER_DIM);
 } detected_object_t;
 
 typedef struct data_complete_t {

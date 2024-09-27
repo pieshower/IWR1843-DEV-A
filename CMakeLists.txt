@@ -20,6 +20,7 @@ add_executable(
     source/mmWaveRadar.cpp
     source/mmWaveRadar_imp.cpp
     source/kalmanFilter.cpp
+    source/kalmanFilter_init.cpp
     source/targetObject.cpp
     source/visualizer.cpp
 )

@@ -3,17 +3,20 @@
 
 #include <eigen3/Eigen/Dense>
 
+#define STATE_DIM 6
+#define MEASR_DIM 3
+
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
 class kalmanFilter {
 private:                         
-    VectorXd X; // current state
-    MatrixXd P; // covariance matrix
-    MatrixXd F; // transition matrix
-    MatrixXd Q; // process covariance matrix
-    MatrixXd H; // measurement matrix
-    MatrixXd R; // measurement covariance matrix
+    VectorXd X = VectorXd(STATE_DIM); // current state
+    MatrixXd P = MatrixXd(STATE_DIM, STATE_DIM); // covariance matrix
+    MatrixXd F = MatrixXd(STATE_DIM, STATE_DIM); // transition matrix
+    MatrixXd Q = MatrixXd(STATE_DIM, STATE_DIM); // process covariance matrix
+    MatrixXd H = MatrixXd(MEASR_DIM, STATE_DIM); // measurement matrix
+    MatrixXd R = MatrixXd(MEASR_DIM, MEASR_DIM); // measurement covariance matrix
 
 public:
      kalmanFilter() {};
