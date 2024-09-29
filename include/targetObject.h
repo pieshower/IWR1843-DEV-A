@@ -9,21 +9,21 @@ private:
     kalmanFilter kalFil;
     detected_object_t trackedObject;
 
-    float distanceThreshold = 0.1;
+    float distanceThreshold = 2.0;
     bool initialized = false;
 
-    bool sameObject(const targetObject &tracker, const detected_object_t &_detectedObject);
-    float calculateDistance(const targetObject &tracker, const detected_object_t &_detectedObject);
+    bool sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+    float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
 
 public:
-     targetObject() {}
-     targetObject(kalmanFilter _kf, detected_object_t _trackedObject);
-    ~targetObject() { delete this; };
+     targetObject();
+     targetObject(kalmanFilter &_kf, const detected_object_t &_trackedObject);
+    ~targetObject() = default;
 
     void processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects);
     detected_object_t getObjectTargeted();
 };
 
-static std::vector<targetObject> trackers(1);
+extern std::vector<targetObject> trackers;
 
 #endif

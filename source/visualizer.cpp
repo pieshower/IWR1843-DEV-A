@@ -74,13 +74,13 @@ void visualizer::update() {
     auto start_time = std::chrono::high_resolution_clock::now();
 
     if (mtx.try_lock()) {
-        // addDetectedObjectsToPointCloud(detectedCloud, detectedObjects);
+        addDetectedObjectsToPointCloud(detectedCloud, detectedObjects);
         // addTrackedObjectsToPointCloud(trackedCloud, trackers);
         updateText(detectedObjects, trackers);
         mtx.unlock();
     }
 
-    // viewer->updatePointCloud<pcl::PointXYZRGB>(detectedCloud, "detected");  
+    viewer->updatePointCloud<pcl::PointXYZRGB>(detectedCloud, "detected");  
     // viewer->updatePointCloud<pcl::PointXYZRGB>(trackedCloud);
     viewer->spinOnce(1, true);
 

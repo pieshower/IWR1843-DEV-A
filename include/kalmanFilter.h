@@ -4,7 +4,7 @@
 #include <eigen3/Eigen/Dense>
 
 #define STATE_DIM 6
-#define MEASR_DIM 3
+#define MEASR_DIM 4
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -20,9 +20,9 @@ private:
 
 public:
      kalmanFilter() {};
-    ~kalmanFilter() { delete this; }
+    ~kalmanFilter() = default;
 
-    void init(VectorXd X_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in);
+    void init(VectorXd &X_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in);
     void predict();
     void update(const VectorXd &z_);
 };

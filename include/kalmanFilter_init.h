@@ -4,7 +4,7 @@
 #include <eigen3/Eigen/Dense>
 
 #define STATE_DIM 6
-#define MEASR_DIM 3
+#define MEASR_DIM 4
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
