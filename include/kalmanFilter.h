@@ -18,11 +18,14 @@ private:
     MatrixXd H = MatrixXd(MEASR_DIM, STATE_DIM); // measurement matrix
     MatrixXd R = MatrixXd(MEASR_DIM, MEASR_DIM); // measurement covariance matrix
 
+    void initKalmanVariables();
+    void init(const VectorXd &X_in);
+
 public:
-     kalmanFilter() {};
+     kalmanFilter();
+     kalmanFilter(const VectorXd &X_in);
     ~kalmanFilter() = default;
 
-    void init(VectorXd &X_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in);
     void predict();
     void update(const VectorXd &z_);
 };

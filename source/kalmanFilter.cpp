@@ -1,19 +1,58 @@
-#include "../include/kalmanFilter.h"
-
 #include <iostream>
+
+#include "../include/kalmanFilter.h"
 
 #define PI 3.14159265
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-void kalmanFilter::init(VectorXd &X_in, MatrixXd &P_in, MatrixXd &F_in, MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
+kalmanFilter::kalmanFilter() {
+    initKalmanVariables();
+}
+
+kalmanFilter::kalmanFilter(const VectorXd &X_in) {
+    initKalmanVariables();
+    init(X_in);
+}
+
+void kalmanFilter::initKalmanVariables() {
+    X << 1, 1, 1, 0, 0, 0;
+
+    P << 1, 0, 0, 0, 0, 0, 
+         0, 1, 0, 0, 0, 0, 
+         0, 0, 1, 0, 0, 0, 
+         0, 0, 0, 1, 0, 0, 
+         0, 0, 0, 0, 1, 0, 
+         0, 0, 0, 0, 0, 1;
+
+    F << 1, 0, 1, 0, 0, 0, 
+         0, 1, 0, 1, 0, 0, 
+         0, 0, 1, 0, 1, 0, 
+         0, 0, 0, 1, 0, 1, 
+         0, 0, 0, 0, 1, 0, 
+         0, 0, 0, 0, 0, 1;
+
+    Q << 0.1, 0, 0, 0, 0, 0, 
+         0, 0.1, 0, 0, 0, 0, 
+         0, 0, 0.1, 0, 0, 0, 
+         0, 0, 0, 0.1, 0, 0, 
+         0, 0, 0, 0, 0.1, 0, 
+         0, 0, 0, 0, 0, 0.1;
+
+    H << 1, 0, 0, 0, 0, 0, 
+         0, 1, 0, 0, 0, 0, 
+         0, 0, 1, 0, 0, 0,
+         0, 0, 0, 1, 0, 0;
+
+    R << 0.1, 0, 0, 0, 
+         0, 0.1, 0, 0, 
+         0, 0, 0.1, 0,
+         0, 0, 0, 0.1;
+}
+
+void kalmanFilter::init(const VectorXd &X_in) {
     X = X_in;
-    P = P_in;
-    F = F_in;
-    H = H_in;
-    R = R_in;
-    Q = Q_in;
 }
 
 void kalmanFilter::predict() {
@@ -24,12 +63,12 @@ void kalmanFilter::predict() {
 }
 
 void kalmanFilter::update(const VectorXd &z) {
-    float px = X(0);
-    float py = X(1);
-    float pz = X(2);
-    float vx = X(3);
-    float vy = X(4);
-    float vz = X(5);
+    float px = X[0];
+    float py = X[1];
+    float pz = X[2];
+    float vx = X[3];
+    float vy = X[4];
+    float vz = X[5];
 
     // Calculate rho, theta, and phi as the predicted measurement
     float rho = sqrt(px * px + py * py + pz * pz);
@@ -44,9 +83,11 @@ void kalmanFilter::update(const VectorXd &z) {
     float rho_dot_p = (px * vx + py * vy + pz * vz) / rho;
 
     // Adjusted predicted measurement vector to match MEASR_DIM
-    VectorXd z_pred = VectorXd(4);
-    std::cout << "z size: " << z_pred.size() << std::endl;
-    z_pred << rho, theta, phi, rho_dot_p;
+    VectorXd z_pred = VectorXd(MEASR_DIM);
+    z_pred[0] = rho;
+    z_pred[1] = theta;
+    z_pred[2] = phi;
+    z_pred[3] = rho_dot_p;
 
     // Measurement residual (difference between actual and predicted)
     VectorXd y = z - z_pred;

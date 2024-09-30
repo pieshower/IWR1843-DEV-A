@@ -1,9 +1,10 @@
+#include <eigen3/Eigen/Dense>
+
 #include "../include/mmWaveRadar.h"
 #include "../include/iwr1843Config.h"
-#include "../include/kalmanFilter_init.h"
 
 mmWaveRadar::mmWaveRadar() {
-    initKalmanVariables();
+    // initKalmanVariables();
     connectPort();
 }
 
@@ -213,11 +214,21 @@ void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {
     float phi = acos(z / rho);
     float rho_dot_p = (x * x + y * y + z * z) / rho;
 
-    VectorXd newStateVector = VectorXd(6);
+    Eigen::VectorXd newStateVector = Eigen::VectorXd(STATE_DIM);
     newStateVector << x, y, z, vx, vy, vz;
+    // newStateVector[0] = x;
+    // newStateVector[1] = y;
+    // newStateVector[2] = z;
+    // newStateVector[3] = vx;
+    // newStateVector[4] = vy;
+    // newStateVector[5] = vz;
     _detectedObject.stateVector = newStateVector;
 
-    VectorXd newSpherVector = VectorXd(4);
+    Eigen::VectorXd newSpherVector = Eigen::VectorXd(SPHER_DIM);
     newSpherVector << rho, theta, phi, rho_dot_p;
+    // newSpherVector[0] = rho;
+    // newSpherVector[1] = theta;
+    // newSpherVector[2] = phi;
+    // newSpherVector[3] = rho_dot_p;
     _detectedObject.spherVector = newSpherVector;
 }
