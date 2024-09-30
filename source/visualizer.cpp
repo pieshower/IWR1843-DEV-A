@@ -81,7 +81,7 @@ void visualizer::update() {
     }
 
     viewer->updatePointCloud<pcl::PointXYZRGB>(detectedCloud, "detected");  
-    // viewer->updatePointCloud<pcl::PointXYZRGB>(trackedCloud);
+    // viewer->updatePointCloud<pcl::PointXYZRGB>(trackedCloud, "tracked");
     viewer->spinOnce(1, true);
 
     auto end_time = std::chrono::high_resolution_clock::now();

@@ -8,14 +8,14 @@ class targetObject {
 private:
     kalmanFilter kalFil;
     detected_object_t trackedObject;
-
-    float distanceThreshold = 2.0;
     bool initialized = false;
+
+    float distanceThreshold = 0.01;
 
     bool sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
 
-public:
+public: 
      targetObject();
      targetObject(kalmanFilter &_kf, const detected_object_t &_trackedObject);
     ~targetObject() = default;

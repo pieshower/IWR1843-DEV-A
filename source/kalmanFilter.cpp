@@ -20,6 +20,7 @@ void kalmanFilter::predict() {
     X = F * X;
     MatrixXd F_t = F.transpose();
     P = F * P * F_t + Q;
+    std::cout << "predict finish" << std::endl;
 }
 
 void kalmanFilter::update(const VectorXd &z) {
@@ -44,6 +45,7 @@ void kalmanFilter::update(const VectorXd &z) {
 
     // Adjusted predicted measurement vector to match MEASR_DIM
     VectorXd z_pred = VectorXd(4);
+    std::cout << "z size: " << z_pred.size() << std::endl;
     z_pred << rho, theta, phi, rho_dot_p;
 
     // Measurement residual (difference between actual and predicted)
@@ -81,6 +83,6 @@ void kalmanFilter::update(const VectorXd &z) {
     long x_size = X.size();
     MatrixXd I = MatrixXd::Identity(x_size, x_size);
     P = (I - K * H) * P;
-    
+
     std::cout << "update finished" << std::endl;
 }

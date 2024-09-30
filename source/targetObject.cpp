@@ -3,23 +3,23 @@
 
 std::vector<targetObject> trackers(1);
 
-// targetObject::targetObject() {
-//     trackedObject.x = 0.0;
-//     trackedObject.y = 0.0;
-//     trackedObject.z = 0.0;
+targetObject::targetObject() {
+    trackedObject.x = 1.0;
+    trackedObject.y = 1.0;
+    trackedObject.z = 1.0;
 
-//     // kalFil.init(X_, P_, F_, H_, R_, Q_);
+    // kalFil.init(X_, P_, F_, H_, R_, Q_);
 
-//     initialized = true;
-// }
+    initialized = true;
+}
 
 targetObject::targetObject(kalmanFilter &_kf, const detected_object_t &_trackedObject) {
     kalFil = _kf;
     trackedObject = _trackedObject;
 
-    std::cout << "Constructor trackedObject: (" << _trackedObject.x << ", "
-                                                << _trackedObject.y << ", "
-                                                << _trackedObject.z << ")" << std::endl;
+    std::cout << "cTracked: (" << _trackedObject.x << ", "
+                               << _trackedObject.y << ", "
+                               << _trackedObject.z << ")" << std::endl;
 }
 
 bool targetObject::sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
@@ -38,13 +38,13 @@ float targetObject::calculateDistance(const detected_object_t &_trackedObject, c
                                std::pow(_trackedObject.y - _detectedObject.y, 2) +
                                std::pow(_trackedObject.z - _detectedObject.z, 2));
     
-    std::cout << "tracker.trackedObject: (" << _trackedObject.x << ", "
-                                            << _trackedObject.y << ", "
-                                            << _trackedObject.z << ")" << std::endl;
+    std::cout << " tracked: (" << _trackedObject.x << ", "
+                               << _trackedObject.y << ", "
+                               << _trackedObject.z << ")" << std::endl;
 
-    std::cout << "_detectedObject: (" << _detectedObject.x << ", "
-                                      << _detectedObject.y << ", "
-                                      << _detectedObject.z << ")" << std::endl;
+    std::cout << "detected: (" << _detectedObject.x << ", "
+                               << _detectedObject.y << ", "
+                               << _detectedObject.z << ")" << std::endl;
     return distance;
 }
 
@@ -54,22 +54,21 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
         for (targetObject &tracker : trackers) {
             if (sameObject(tracker.trackedObject, object)) {
                 std::cout << "same object detected" << std::endl;
-                tracker.kalFil.update(object.spherVector);
                 tracker.trackedObject = object;
+                tracker.kalFil.predict();
+                tracker.kalFil.update(object.spherVector);
             }
             else {
                 isNewObject = true;
-                break;
             }
-        }
-        if (isNewObject) {
-            std::cout << "new object detected" << std::endl;
-            kalmanFilter newFilter;
-            Eigen::VectorXd stateVectorCopy = object.stateVector;
-            newFilter.init(stateVectorCopy, P_, F_, H_, R_, Q_);
-            targetObject newTrack(newFilter, object);
-            newTrack.initialized = true;      
-            trackers.push_back(newTrack);
+            if (isNewObject) {
+                std::cout << "new object detected" << std::endl;
+                kalmanFilter newFilter;
+                Eigen::VectorXd stateVectorCopy = object.stateVector;
+                newFilter.init(stateVectorCopy, P_, F_, H_, R_, Q_);
+                targetObject newTrack(kalFil, object);    
+                trackers.push_back(newTrack);
+            }
         }
     }
     while (trackers.size() > 15) {
