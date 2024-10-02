@@ -8,20 +8,27 @@ class targetObject {
 private:
     kalmanFilter kalFil;
     detected_object_t trackedObject;
-
-    float distanceThreshold = 0.5;
     bool initialized = false;
 
-    bool sameObject(const targetObject &tracker, const detected_object_t &_detectedObject);
-    float calculateDistance(const targetObject &tracker, const detected_object_t &_detectedObject);
+    float distanceThreshold = 0.5;
+    float velocityThreshold = 1.0;
 
-public:
-     targetObject(kalmanFilter _kf, detected_object_t _trackedObject);
-    ~targetObject() { delete this; };
+    bool sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+    float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+    float calculateVelocity(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+
+    void removeStaleTrackers(std::vector<bool> &_trackersUpdated);
+
+public: 
+     targetObject();
+     targetObject(kalmanFilter &_kf, const detected_object_t &_trackedObject);
+    ~targetObject() = default;
 
     void processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects);
+    detected_object_t& getObjectTargeted();
+    bool& isInitialized();
 };
 
-static std::vector<targetObject> trackers;
+extern std::vector<targetObject> trackers;
 
 #endif
