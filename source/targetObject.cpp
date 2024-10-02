@@ -21,10 +21,12 @@ targetObject::targetObject(kalmanFilter &_kf, const detected_object_t &_trackedO
 
 bool targetObject::sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
     float distance = calculateDistance(_trackedObject, _detectedObject);
+    float velocity = calculateVelocity(_trackedObject, _detectedObject);
 
     std::cout << "distance: " << distance << std::endl;
+    std::cout << "velocity: " << velocity << std::endl;
 
-    if (distance < distanceThreshold) {
+    if (distance < distanceThreshold && velocity < velocityThreshold) {
         return true;
     }
     else {
@@ -47,19 +49,38 @@ float targetObject::calculateDistance(const detected_object_t &_trackedObject, c
     return distance;
 }
 
+float targetObject::calculateVelocity(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
+    float velocity = std::abs(_trackedObject.velocity - _detectedObject.velocity);
+    
+    // std::cout << " tracked V: " << _trackedObject.velocity << std::endl;
+    // std::cout << "detected V: " << _detectedObject.velocity << std::endl;
+    
+    return velocity;
+}
+
+void targetObject::removeStaleTrackers(std::vector<bool> &_trackersUpdated) {
+    trackers.erase(std::remove_if(trackers.begin(), trackers.end(), [&](const targetObject &tracker) {
+        size_t trackerIndex = &tracker - &trackers[0];
+        return !_trackersUpdated[trackerIndex];
+    }),
+    trackers.end());
+}
+
 void targetObject::processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects) {
+    std::vector<bool> trackersUpdated(trackers.size(), false);
+    
     for (const detected_object_t &object : _detectedObjects) {
-        bool isNewObject = false;
+        bool isNewObject = true;
         for (targetObject &tracker : trackers) {
             if (sameObject(tracker.trackedObject, object)) {
                 std::cout << "same object detected" << std::endl;
                 tracker.trackedObject = object;
                 tracker.kalFil.predict();
                 tracker.kalFil.update(object.spherVector);
-            }
-            else {
-                isNewObject = true;
-                trackers.pop_back();
+
+                size_t trackerIndex = &tracker - &trackers[0];
+                trackersUpdated[trackerIndex] = true;
+                isNewObject = false;
                 break;
             }
         }
@@ -70,11 +91,15 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
             trackers.push_back(newTrack);
         }
     }
-    // while (trackers.size() > 50) {
-    //     trackers.pop_back();
-    // }
+    if (!trackers.empty()) {
+        removeStaleTrackers(trackersUpdated);
+    }
+    else {
+        targetObject defaultTracker;
+        trackers.push_back(defaultTracker);
+    }
 }
 
-detected_object_t targetObject::getObjectTargeted() {
+detected_object_t& targetObject::getObjectTargeted() {
     return trackedObject;
 }

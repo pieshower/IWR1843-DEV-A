@@ -10,10 +10,14 @@ private:
     detected_object_t trackedObject;
     bool initialized = false;
 
-    float distanceThreshold = 0.05;
+    float distanceThreshold = 2.0;
+    float velocityThreshold = 2.0;
 
     bool sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+    float calculateVelocity(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+
+    void removeStaleTrackers(std::vector<bool> &_trackersUpdated);
 
 public: 
      targetObject();
@@ -21,7 +25,7 @@ public:
     ~targetObject() = default;
 
     void processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects);
-    detected_object_t getObjectTargeted();
+    detected_object_t& getObjectTargeted();
 };
 
 extern std::vector<targetObject> trackers;
