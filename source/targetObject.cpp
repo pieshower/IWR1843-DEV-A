@@ -3,18 +3,16 @@
 std::vector<targetObject> trackers(1);
 
 targetObject::targetObject() {
-    trackedObject.x = 1.0;
-    trackedObject.y = 1.0;
-    trackedObject.z = 1.0;
-
-    // kalFil.init(X_, P_, F_, H_, R_, Q_);
-
-    initialized = true;
+    trackedObject.x = 0;
+    trackedObject.y = 0;
+    trackedObject.z = 0;
+    trackedObject.velocity = 0;
 }
 
 targetObject::targetObject(kalmanFilter &_kf, const detected_object_t &_trackedObject) {
     kalFil = _kf;
     trackedObject = _trackedObject;
+    initialized = true;
 
     std::cout << "cTracked: (" << trackedObject.x << ", " << trackedObject.y << ", " << trackedObject.z << ")" << std::endl;
 }
@@ -64,6 +62,12 @@ void targetObject::removeStaleTrackers(std::vector<bool> &_trackersUpdated) {
         return !_trackersUpdated[trackerIndex];
     }),
     trackers.end());
+
+    if (trackers.empty()) {
+        // always default a tracker
+        targetObject defaultTracker;
+        trackers.push_back(defaultTracker);
+    }
 }
 
 void targetObject::processDetectedObjects(const std::vector<detected_object_t> &_detectedObjects) {
@@ -94,12 +98,12 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
     if (!trackers.empty()) {
         removeStaleTrackers(trackersUpdated);
     }
-    else {
-        targetObject defaultTracker;
-        trackers.push_back(defaultTracker);
-    }
 }
 
 detected_object_t& targetObject::getObjectTargeted() {
     return trackedObject;
+}
+
+bool& targetObject::isInitialized() {
+    return initialized;
 }

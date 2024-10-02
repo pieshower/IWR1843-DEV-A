@@ -15,7 +15,7 @@ void radarLoop() {
 }
 
 void trackLoop() {
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     while (true) {
         if (mtx.try_lock()) {
             for (targetObject &tracker : trackers) {
