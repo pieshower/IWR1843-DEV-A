@@ -85,10 +85,6 @@ void kalmanFilter::update(const VectorXd &z) {
     // Adjusted predicted measurement vector to match MEASR_DIM
     VectorXd z_pred = VectorXd(MEASR_DIM);
     z_pred << rho, theta, phi, rho_dot_p;
-    // z_pred[0] = rho;
-    // z_pred[1] = theta;
-    // z_pred[2] = phi;
-    // z_pred[3] = rho_dot_p;
 
     // Measurement residual (difference between actual and predicted)
     VectorXd y = z - z_pred;
