@@ -12,9 +12,9 @@ void visualizer::setup() {
 
     viewer->addPointCloud<pcl::PointXYZRGB>(detectedCloud, "detected");
     viewer->addPointCloud<pcl::PointXYZRGB>(trackedCloud, "tracked");
-    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "detected");
-    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "tracked");
-    viewer->addCoordinateSystem(20.0);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "detected");
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "tracked");
+    // viewer->addCoordinateSystem(20.0);
     viewer->setCameraPosition(35, 35, 35, 0, 0, 5, 0, 0, 1);
     viewer->addText("", 0, 0, numDetectedID);
     viewer->addText("", 0, 0, numTrackedID);

@@ -13,14 +13,14 @@ targetObject::targetObject(kalmanFilter &_kf, const detected_object_t &_trackedO
     kalFil = _kf;
     trackedObject = _trackedObject;
     initialized = true;
-
-    std::cout << "cTracked: (" << trackedObject.x << ", " << trackedObject.y << ", " << trackedObject.z << ")" << std::endl;
 }
 
 bool targetObject::sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
     float distance = calculateDistance(_trackedObject, _detectedObject);
     float velocity = calculateVelocity(_trackedObject, _detectedObject);
 
+    std::cout << " tracked: (" << _trackedObject.x << ", " << _trackedObject.y << ", " << _trackedObject.z << ")" << std::endl;
+    std::cout << "detected: (" << _detectedObject.x << ", " << _detectedObject.y << ", " << _detectedObject.z << ")" << std::endl;
     std::cout << "distance: " << distance << std::endl;
     std::cout << "velocity: " << velocity << std::endl;
 
@@ -36,29 +36,17 @@ float targetObject::calculateDistance(const detected_object_t &_trackedObject, c
     float distance = std::sqrt(std::pow(_trackedObject.x - _detectedObject.x, 2) +
                                std::pow(_trackedObject.y - _detectedObject.y, 2) +
                                std::pow(_trackedObject.z - _detectedObject.z, 2));
-    
-    std::cout << " tracked: (" << _trackedObject.x << ", "
-                               << _trackedObject.y << ", "
-                               << _trackedObject.z << ")" << std::endl;
-
-    std::cout << "detected: (" << _detectedObject.x << ", "
-                               << _detectedObject.y << ", "
-                               << _detectedObject.z << ")" << std::endl;
     return distance;
 }
 
 float targetObject::calculateVelocity(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
-    float velocity = std::abs(_trackedObject.velocity - _detectedObject.velocity);
-    
-    // std::cout << " tracked V: " << _trackedObject.velocity << std::endl;
-    // std::cout << "detected V: " << _detectedObject.velocity << std::endl;
-    
+    float velocity = _trackedObject.velocity - _detectedObject.velocity;
     return velocity;
 }
 
 void targetObject::removeStaleTrackers(std::vector<bool> &_trackersUpdated) {
-    trackers.erase(std::remove_if(trackers.begin(), trackers.end(), [&](const targetObject &tracker) {
-        size_t trackerIndex = &tracker - &trackers[0];
+    trackers.erase(std::remove_if(trackers.begin(), trackers.end(), [&](const targetObject &_tracker) {
+        size_t trackerIndex = &_tracker - &trackers[0];
         return !_trackersUpdated[trackerIndex];
     }),
     trackers.end());
