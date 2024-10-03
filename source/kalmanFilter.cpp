@@ -72,22 +72,23 @@ void kalmanFilter::update(const VectorXd &z) {
 
     // Calculate rho, theta, and phi as the predicted measurement
     float rho = sqrt(px * px + py * py + pz * pz);
+
+    // normailze rho if its really small i.e. 0
+    if (rho < 0.0001) { rho = 0.0001; }
+
     float theta = atan2(py, px);
     float phi = acos(pz / rho);
-
-    if (rho < 0.0001) {
-        rho = 0.0001;
-    }
 
     // Predicted radial velocity (rho_dot_p)
     float rho_dot_p = (px * vx + py * vy + pz * vz) / rho;
 
     // Adjusted predicted measurement vector to match MEASR_DIM
     VectorXd z_pred = VectorXd(MEASR_DIM);
-    z_pred[0] = rho;
-    z_pred[1] = theta;
-    z_pred[2] = phi;
-    z_pred[3] = rho_dot_p;
+    z_pred << rho, theta, phi, rho_dot_p;
+    // z_pred[0] = rho;
+    // z_pred[1] = theta;
+    // z_pred[2] = phi;
+    // z_pred[3] = rho_dot_p;
 
     // Measurement residual (difference between actual and predicted)
     VectorXd y = z - z_pred;

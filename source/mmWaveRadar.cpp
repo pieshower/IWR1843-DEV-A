@@ -207,28 +207,18 @@ void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {
     float vz = velocity * (z / magnitude);
 
     float rho = sqrt(x * x + y * y + z * z);
-    float theta = atan(y / x);
     
     if (rho < 0.0001) { rho = 0.0001; }
 
+    float theta = atan(y / x);
     float phi = acos(z / rho);
     float rho_dot_p = (x * x + y * y + z * z) / rho;
 
     Eigen::VectorXd newStateVector = Eigen::VectorXd(STATE_DIM);
     newStateVector << x, y, z, vx, vy, vz;
-    // newStateVector[0] = x;
-    // newStateVector[1] = y;
-    // newStateVector[2] = z;
-    // newStateVector[3] = vx;
-    // newStateVector[4] = vy;
-    // newStateVector[5] = vz;
     _detectedObject.stateVector = newStateVector;
 
     Eigen::VectorXd newSpherVector = Eigen::VectorXd(SPHER_DIM);
     newSpherVector << rho, theta, phi, rho_dot_p;
-    // newSpherVector[0] = rho;
-    // newSpherVector[1] = theta;
-    // newSpherVector[2] = phi;
-    // newSpherVector[3] = rho_dot_p;
     _detectedObject.spherVector = newSpherVector;
 }
