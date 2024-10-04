@@ -17,9 +17,9 @@ const char* iwr1843ConfigCommands_1[] = {
     "chirpCfg 0 0 0 0 0 0 0 1",
     "chirpCfg 1 1 0 0 0 0 0 4",
     "chirpCfg 2 2 0 0 0 0 0 2",
-    "frameCfg 0 2 16 0 100 1 0",
+    "frameCfg 0 2 16 0 33.33 1 0",
     "lowPower 0 0",
-    "guiMonitor -1 1 1 0 0 0 1",
+    "guiMonitor -1 1 0 0 0 0 0",
     "cfarCfg -1 0 2 8 4 3 0 15 1",
     "cfarCfg -1 1 0 4 2 3 1 15 1",
     "multiObjBeamForming -1 1 0.5",
@@ -48,7 +48,7 @@ const char* iwr1843ConfigCommands_2[] {
     "chirpCfg 0 0 0 0 0 0 0 1",
     "chirpCfg 1 1 0 0 0 0 0 4",
     "chirpCfg 2 2 0 0 0 0 0 2",
-    "frameCfg 0 2 32 0 100 1 0",
+    "frameCfg 0 2 32 0 33.33 1 0",
     "lowPower 0 0",
     "guiMonitor -1 1 0 0 0 0 0",
     "cfarCfg -1 0 2 8 4 3 0 15 1",
@@ -67,8 +67,8 @@ const char* iwr1843ConfigCommands_2[] {
     "cfarFovCfg -1 0 0 4.46",
     "cfarFovCfg -1 1 -4.98 4.98",
     "calibData 0 0 0"
-}
+};
 
-const unsigned long configCommandsSize = sizeof(iwr1843ConfigCommands) / sizeof(iwr1843ConfigCommands[0]);
+const unsigned long configCommandsSize = sizeof(iwr1843ConfigCommands_1) / sizeof(iwr1843ConfigCommands_1[0]);
 
 #endif

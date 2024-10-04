@@ -49,7 +49,7 @@ void mmWaveRadar::connectPort() {
 }
 
 void mmWaveRadar::start() {
-    configure(iwr1843ConfigCommands, configCommandsSize);
+    configure(iwr1843ConfigCommands_2, configCommandsSize);
     std::string command = sensorStart + "\r\n";
     userPort.Write(command);
     usleep(10000);
@@ -66,7 +66,7 @@ void mmWaveRadar::stop() {
 void mmWaveRadar::read() {
     std::vector<uint8_t> buf;
 
-    while (buf.size() < MAX_BUFFER_SIZE) {
+    while (buf.size() < MAX_BUFFER_SIZE && dataPort.IsDataAvailable()) {
         uint8_t byte;
         dataPort.ReadByte(byte);
         buf.push_back(byte);
