@@ -42,7 +42,7 @@ public:
 
     void start();
     void  stop();
-    void read();
+    void  read();
 };
 
 inline mmWaveRadar mmWaveRadar::RadarGuy;
