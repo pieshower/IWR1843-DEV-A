@@ -8,13 +8,14 @@ visualizer::visualizer() {
 }
 
 void visualizer::setup() {
-    viewer->setBackgroundColor(0.1, 0.1, 0.1);
-
+    viewer->setBackgroundColor(0.2, 0.2, 0.2);
     viewer->addPointCloud<pcl::PointXYZRGB>(detectedCloud, "detected");
     viewer->addPointCloud<pcl::PointXYZRGB>(trackedCloud, "tracked");
-    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "detected");
-    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "tracked");
-    // viewer->addCoordinateSystem(20.0);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "detected");
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 10, "tracked");
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 0, 0, 0, "detected");
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR, 1, 0, 0, "tracked");
+    viewer->addCoordinateSystem(20.0);
     viewer->setCameraPosition(35, 35, 35, 0, 0, 5, 0, 0, 1);
     viewer->addText("", 0, 0, numDetectedID);
     viewer->addText("", 0, 0, numTrackedID);
@@ -28,15 +29,9 @@ void visualizer::addDetectedObjectsToPointCloud(pcl::PointCloud<pcl::PointXYZRGB
     _detectedCloud->points.resize(_detectedCloud->width);
 
     for (uint32_t i = 0; i < _detectedCloud->width; ++i) {
-        _detectedCloud->points[i].x = _detectedObjects[i].x;
-        _detectedCloud->points[i].y = _detectedObjects[i].y;
-        _detectedCloud->points[i].z = _detectedObjects[i].z;
-
-        uint8_t r = 0, g = 0, b = 100;
-        _detectedCloud->points[i].rgb = PackRGB(r, g, b);
-        _detectedCloud->points[i].r = r;
-        _detectedCloud->points[i].g = g;
-        _detectedCloud->points[i].b = b;
+        _detectedCloud->points[i].x = _detectedObjects[i].x + 1;
+        _detectedCloud->points[i].y = _detectedObjects[i].y + 1;
+        _detectedCloud->points[i].z = _detectedObjects[i].z + 1;
     }
 }
 
@@ -49,15 +44,9 @@ void visualizer::addTrackedObjectsToPointCloud(pcl::PointCloud<pcl::PointXYZRGB>
 
     for (uint32_t i = 0; i < _trackedCloud->width; ++i) {
         if (_trackers[i].isInitialized()) {
-            _trackedCloud->points[i].x = _trackers[i].getObjectTargeted().x;
-            _trackedCloud->points[i].y = _trackers[i].getObjectTargeted().y;
-            _trackedCloud->points[i].z = _trackers[i].getObjectTargeted().z;
-
-            uint8_t r = 100, g = 0, b = 0;
-            _trackedCloud->points[i].rgb = PackRGB(r, g, b);
-            _trackedCloud->points[i].r = r;
-            _trackedCloud->points[i].g = g;
-            _trackedCloud->points[i].b = b;
+            _trackedCloud->points[i].x = _trackers[i].getObjectTargeted().x + 1;
+            _trackedCloud->points[i].y = _trackers[i].getObjectTargeted().y + 1;
+            _trackedCloud->points[i].z = _trackers[i].getObjectTargeted().z + 1;
         }
     }
 }
@@ -83,7 +72,7 @@ void visualizer::update() {
         mtx.unlock();
     }
 
-    // viewer->updatePointCloud<pcl::PointXYZRGB>(detectedCloud, "detected");  
+    viewer->updatePointCloud<pcl::PointXYZRGB>(detectedCloud, "detected");  
     viewer->updatePointCloud<pcl::PointXYZRGB>(trackedCloud, "tracked");
     viewer->spinOnce(1, true);
 

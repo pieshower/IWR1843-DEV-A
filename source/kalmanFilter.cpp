@@ -4,9 +4,6 @@
 
 #define PI 3.14159265
 
-using Eigen::MatrixXd;
-using Eigen::VectorXd;
-
 kalmanFilter::kalmanFilter() {
     initKalmanVariables();
 }
