@@ -66,7 +66,7 @@ void mmWaveRadar::stop() {
 void mmWaveRadar::read() {
     std::vector<uint8_t> buf;
 
-    while (buf.size() < MAX_BUFFER_SIZE && dataPort.IsDataAvailable()) {
+    while (buf.size() < MAX_BUFFER_SIZE) {
         uint8_t byte;
         dataPort.ReadByte(byte);
         buf.push_back(byte);
