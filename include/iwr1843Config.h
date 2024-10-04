@@ -48,7 +48,7 @@ const char* iwr1843ConfigCommands_2[] {
     "chirpCfg 0 0 0 0 0 0 0 1",
     "chirpCfg 1 1 0 0 0 0 0 4",
     "chirpCfg 2 2 0 0 0 0 0 2",
-    "frameCfg 0 2 32 5 33.33 1 0",
+    "frameCfg 0 2 32 0 33.33 1 0",
     "lowPower 0 0",
     "guiMonitor -1 1 0 0 0 0 0",
     "cfarCfg -1 0 2 8 4 3 0 15 1",
