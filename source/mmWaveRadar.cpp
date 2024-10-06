@@ -102,15 +102,9 @@ void mmWaveRadar::parseFrames(std::vector<uint8_t> &_buf, std::vector<uint8_t> &
 }
 
 void mmWaveRadar::parseFrame(std::vector<uint8_t> &_frame) {
-    // std::cout << std::endl << std::dec;
     parseFrameHeader(_frame, dataHeader);
-    // std::cout << "current frame (" << _frame.size() << " size):" << std::endl;
-    // std::cout << "Actual parsed packet length: " << dataHeader.totalPacketLen << std::endl;
-    // std::cout << "current number of objects detected: " << dataHeader.numDetectedObj << std::endl;
     parseFrameTL(_frame, dataTL);
-    // std::cout << "current number tlv length: " << dataTL.length << std::endl << std::endl;
     parseFrameDetectedObjects(_frame, detectedObject, detectedObjects);
-    // updateDataComplete(dataComplete, dataHeader, dataTL, detectedObjects);
 }
 
 void mmWaveRadar::parseFrameHeader(std::vector<uint8_t> &_frame, data_header_t &_dataHeader) {

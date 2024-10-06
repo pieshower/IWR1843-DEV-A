@@ -15,7 +15,7 @@ targetObject::targetObject(kalmanFilter &_kf, const detected_object_t &_trackedO
     initialized = true;
 }
 
-bool targetObject::sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
+int targetObject::sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
     float distance = calculateDistance(_trackedObject, _detectedObject);
     float velocity = calculateVelocity(_trackedObject, _detectedObject);
 
@@ -25,10 +25,13 @@ bool targetObject::sameObject(const detected_object_t &_trackedObject, const det
     std::cout << "velocity: " << velocity << std::endl;
 
     if (distance < distanceThreshold && velocity < velocityThreshold) {
-        return true;
+        return SAME_OBJECT;
+    }
+    else if (distance > distanceThreshold * 45) {
+        return EXCE_THRESH;
     }
     else {
-        return false;
+        return NOTHN_FOUND;
     }
 }
 
@@ -45,9 +48,16 @@ float targetObject::calculateVelocity(const detected_object_t &_trackedObject, c
 }
 
 void targetObject::removeStaleTrackers(std::vector<bool> &_trackersUpdated) {
+    for (auto &tracker : trackers) {
+        if (!_trackersUpdated[&tracker - &trackers[0]]) {
+            tracker.isValidCounter--;
+        } else {
+            tracker.isValidCounter = 3;
+        }
+    }
+    
     trackers.erase(std::remove_if(trackers.begin(), trackers.end(), [&](const targetObject &_tracker) {
-        size_t trackerIndex = &_tracker - &trackers[0];
-        return !_trackersUpdated[trackerIndex];
+        return _tracker.isValidCounter <= 0;
     }),
     trackers.end());
 
@@ -64,7 +74,8 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
     for (const detected_object_t &object : _detectedObjects) {
         bool isNewObject = true;
         for (targetObject &tracker : trackers) {
-            if (sameObject(tracker.trackedObject, object)) {
+            int checkTracker = sameObject(tracker.trackedObject, object);
+            if (checkTracker == SAME_OBJECT) {
                 std::cout << "same object detected" << std::endl;
                 tracker.trackedObject = object;
                 tracker.kalFil.predict();
@@ -72,6 +83,10 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
 
                 size_t trackerIndex = &tracker - &trackers[0];
                 trackersUpdated[trackerIndex] = true;
+                isNewObject = false;
+                break;
+            }
+            else if (checkTracker == EXCE_THRESH) {
                 isNewObject = false;
                 break;
             }
@@ -83,9 +98,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
             trackers.push_back(newTrack);
         }
     }
-    if (!trackers.empty()) {
-        removeStaleTrackers(trackersUpdated);
-    }
+    removeStaleTrackers(trackersUpdated);
 }
 
 detected_object_t& targetObject::getObjectTargeted() {

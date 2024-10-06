@@ -4,16 +4,21 @@
 #include "../include/mmWaveRadar.h"
 #include "../include/kalmanFilter.h"
 
+#define NOTHN_FOUND 0x00
+#define SAME_OBJECT 0x01
+#define EXCE_THRESH 0x02
+
 class targetObject {
 private:
     kalmanFilter kalFil;
     detected_object_t trackedObject;
     bool initialized = false;
+    uint8_t isValidCounter = 3;
 
-    float distanceThreshold = 0.2;
-    float velocityThreshold = 3.0;
+    float distanceThreshold = 0.05;
+    float velocityThreshold = 3.00;
 
-    bool sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+    int sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateVelocity(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
 
