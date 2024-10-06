@@ -194,19 +194,17 @@ void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {
     float z = _detectedObject.z;
     float velocity = _detectedObject.velocity;
 
-    float magnitude = sqrt(x * x + y * y + z * z);
-
-    float vx = velocity * (x / magnitude);
-    float vy = velocity * (y / magnitude);
-    float vz = velocity * (z / magnitude);
-
     float rho = sqrt(x * x + y * y + z * z);
-    
-    if (rho < 0.0001) { rho = 0.0001; }
+    rho = std::max(rho, 0.001f);
 
-    float theta = atan(y / x);
-    float phi = acos(z / rho);
-    float rho_dot_p = (x * x + y * y + z * z) / rho;
+    float vx = velocity * (x / rho);
+    float vy = velocity * (y / rho);
+    float vz = velocity * (z / rho);
+
+
+    float theta = atan2(y, x);
+    float phi = acos(std::clamp(z / rho, -1.0f, 1.0f));
+    float rho_dot_p = (x * vx + y * vy + z * vz) / rho;
 
     Eigen::VectorXd newStateVector = Eigen::VectorXd(STATE_DIM);
     newStateVector << x, y, z, vx, vy, vz;

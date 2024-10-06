@@ -44,15 +44,15 @@ void kalmanFilter::initKalmanVariables() {
          0, dt3 / 2 * sigma_a2, 0, 0, dt2 * sigma_a2, 0,
          0, 0, dt3 / 2 * sigma_a2, 0, 0, dt2 * sigma_a2;
 
-    H << 1, 0, 0, 0, 0, 0, 
-         0, 1, 0, 0, 0, 0, 
-         0, 0, 1, 0, 0, 0,
-         0, 0, 0, 1, 0, 0;
+    H << 1, 1, 1, 0, 0, 0, 
+         1, 1, 0, 0, 0, 0, 
+         1, 1, 1, 0, 0, 0,
+         1, 1, 1, 1, 1, 1;
 
-    R << 0.1, 0, 0, 0, 
-         0, 0.1, 0, 0, 
-         0, 0, 0.1, 0,
-         0, 0, 0, 0.1;
+    R << 0.5, 0, 0, 0, 
+         0, 0.5, 0, 0, 
+         0, 0, 0.5, 0,
+         0, 0, 0, 0.5;
 }
 
 void kalmanFilter::init(const VectorXd &X_in) {
@@ -82,7 +82,7 @@ void kalmanFilter::update(const VectorXd &z) {
     rho = std::max(rho, 0.001f);
 
     float theta = atan2(py, px);
-    float phi = acos(pz / rho);
+    float phi = acos(std::clamp(z / rho, -1.0f, 1.0f));
     float rho_dot_p = (px * vx + py * vy + pz * vz) / rho;
 
     // Adjusted predicted measurement vector to match MEASR_DIM
