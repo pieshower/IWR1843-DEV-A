@@ -87,7 +87,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
                 break;
             }
             else if (checkTracker == EXCE_THRESH) {
-                // isNewObject = false;
+                isNewObject = false;
                 // break;
             }
         }
