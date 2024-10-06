@@ -46,7 +46,7 @@ float targetObject::calculateVelocity(const detected_object_t &_trackedObject, c
 }
 
 void targetObject::removeStaleTrackers(std::vector<bool> &_trackersUpdated) {
-    for (auto &tracker : trackers) {
+    for (targetObject &tracker : trackers) {
         if (!_trackersUpdated[&tracker - &trackers[0]]) {
             tracker.isValidCounter--;
         } else {
@@ -87,8 +87,8 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
                 break;
             }
             else if (checkTracker == EXCE_THRESH) {
-                isNewObject = false;
-                break;
+                // isNewObject = false;
+                // break;
             }
         }
         if (isNewObject) {
