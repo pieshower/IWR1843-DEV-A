@@ -19,10 +19,8 @@ int targetObject::sameObject(const detected_object_t &_trackedObject, const dete
     float distance = calculateDistance(_trackedObject, _detectedObject);
     float velocity = calculateVelocity(_trackedObject, _detectedObject);
 
-    std::cout << " tracked: (" << _trackedObject.x << ", " << _trackedObject.y << ", " << _trackedObject.z << ")" << std::endl;
-    std::cout << "detected: (" << _detectedObject.x << ", " << _detectedObject.y << ", " << _detectedObject.z << ")" << std::endl;
-    std::cout << "distance: " << distance << std::endl;
-    std::cout << "velocity: " << velocity << std::endl;
+    // std::cout << "distance: " << distance << std::endl;
+    // std::cout << "velocity: " << velocity << std::endl;
 
     if (distance < distanceThreshold && velocity < velocityThreshold) {
         return SAME_OBJECT;
@@ -76,7 +74,8 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
         for (targetObject &tracker : trackers) {
             int checkTracker = sameObject(tracker.trackedObject, object);
             if (checkTracker == SAME_OBJECT) {
-                std::cout << "same object detected" << std::endl;
+                // std::cout << "same object detected" << std::endl;
+                std::cout << "  tracked: (" << object.x << ", " << object.y << ", " << object.z << ")" << std::endl;
                 tracker.trackedObject = object;
                 tracker.kalFil.predict();
                 tracker.kalFil.update(object.spherVector);
@@ -84,6 +83,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
                 size_t trackerIndex = &tracker - &trackers[0];
                 trackersUpdated[trackerIndex] = true;
                 isNewObject = false;
+
                 break;
             }
             else if (checkTracker == EXCE_THRESH) {
@@ -92,7 +92,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
             }
         }
         if (isNewObject) {
-            std::cout << "new object detected" << std::endl;
+            // std::cout << "new object detected" << std::endl;
             kalmanFilter newFilter(object.stateVector);
             targetObject newTrack(newFilter, object);    
             trackers.push_back(newTrack);
