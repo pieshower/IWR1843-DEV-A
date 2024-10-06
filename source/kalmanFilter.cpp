@@ -82,7 +82,7 @@ void kalmanFilter::update(const VectorXd &z) {
     rho = std::max(rho, 0.001f);
 
     float theta = atan2(py, px);
-    float phi = acos(std::clamp(z / rho, -1.0f, 1.0f));
+    float phi = acos(std::clamp(pz / rho, -1.0f, 1.0f));
     float rho_dot_p = (px * vx + py * vy + pz * vz) / rho;
 
     // Adjusted predicted measurement vector to match MEASR_DIM
