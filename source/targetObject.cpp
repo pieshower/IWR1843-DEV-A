@@ -25,7 +25,7 @@ int targetObject::checkTracked(const detected_object_t &_trackedObject, const de
     if (distance < distanceThreshold && velocity < velocityThreshold) {
         return SAME_OBJECT;
     }
-    else if (distance > distanceThreshold * 2 && distance < distanceThreshold * 30) {
+    else if (distance > distanceThreshold * 4 && distance < distanceThreshold * 30) {
         return EXCE_THRESH;
     }
     else {
@@ -50,7 +50,7 @@ void targetObject::removeStaleTrackers(std::vector<bool> &_trackersUpdated) {
         if (!_trackersUpdated[&tracker - &trackers[0]]) {
             tracker.isValidCounter--;
         } else {
-            tracker.isValidCounter = 3;
+            tracker.isValidCounter = VALID_COUNT;
         }
     }
     

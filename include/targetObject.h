@@ -8,12 +8,14 @@
 #define SAME_OBJECT 0x01
 #define EXCE_THRESH 0x02
 
+#define VALID_COUNT 0x05
+
 class targetObject {
 private:
     kalmanFilter kalFil;
     detected_object_t trackedObject;
     bool initialized = false;
-    uint8_t isValidCounter = 3;
+    uint8_t isValidCounter = VALID_COUNT;
 
     float distanceThreshold = 0.05;
     float velocityThreshold = 3.00;
