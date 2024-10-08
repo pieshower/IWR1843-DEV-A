@@ -15,7 +15,7 @@ targetObject::targetObject(kalmanFilter &_kf, const detected_object_t &_trackedO
     initialized = true;
 }
 
-int targetObject::checkTracker(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
+int targetObject::checkTracked(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
     float distance = calculateDistance(_trackedObject, _detectedObject);
     float velocity = calculateVelocity(_trackedObject, _detectedObject);
 
@@ -72,7 +72,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
     for (const detected_object_t &object : _detectedObjects) {
         bool isNewObject = true;
         for (targetObject &tracker : trackers) {
-            int checkTracker = checkTracker(tracker.trackedObject, object);
+            int checkTracker = checkTracked(tracker.trackedObject, object);
             if (checkTracker == SAME_OBJECT) {
                 // std::cout << "same object detected" << std::endl;
                 size_t trackerIndex = &tracker - &trackers[0];
