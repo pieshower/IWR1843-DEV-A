@@ -18,7 +18,7 @@ private:
     float distanceThreshold = 0.05;
     float velocityThreshold = 3.00;
 
-    int sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
+    int checkTracker(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateVelocity(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
 
