@@ -15,7 +15,7 @@ targetObject::targetObject(kalmanFilter &_kf, const detected_object_t &_trackedO
     initialized = true;
 }
 
-int targetObject::sameObject(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
+int targetObject::checkTracker(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject) {
     float distance = calculateDistance(_trackedObject, _detectedObject);
     float velocity = calculateVelocity(_trackedObject, _detectedObject);
 
@@ -25,11 +25,11 @@ int targetObject::sameObject(const detected_object_t &_trackedObject, const dete
     if (distance < distanceThreshold && velocity < velocityThreshold) {
         return SAME_OBJECT;
     }
-    else if (distance > distanceThreshold * 45) {
+    else if (distance > distanceThreshold * 2 && distance < distanceThreshold * 30) {
         return EXCE_THRESH;
     }
     else {
-        return NOTHN_FOUND;
+        return NEW_OBJ_DET;
     }
 }
 
@@ -72,23 +72,22 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
     for (const detected_object_t &object : _detectedObjects) {
         bool isNewObject = true;
         for (targetObject &tracker : trackers) {
-            int checkTracker = sameObject(tracker.trackedObject, object);
+            int checkTracker = checkTracker(tracker.trackedObject, object);
             if (checkTracker == SAME_OBJECT) {
                 // std::cout << "same object detected" << std::endl;
+                size_t trackerIndex = &tracker - &trackers[0];
+                std::cout << "  tracker: " << (int)trackerIndex + 1 << std::endl;
                 std::cout << "  tracked: (" << object.x << ", " << object.y << ", " << object.z << ")" << std::endl;
+                trackersUpdated[trackerIndex] = true;
                 tracker.trackedObject = object;
                 tracker.kalFil.predict();
                 tracker.kalFil.update(object.spherVector);
-
-                size_t trackerIndex = &tracker - &trackers[0];
-                trackersUpdated[trackerIndex] = true;
                 isNewObject = false;
-
                 break;
             }
             else if (checkTracker == EXCE_THRESH) {
                 isNewObject = false;
-                // break;
+                break;
             }
         }
         if (isNewObject) {

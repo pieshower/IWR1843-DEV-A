@@ -4,7 +4,7 @@
 #include "../include/mmWaveRadar.h"
 #include "../include/kalmanFilter.h"
 
-#define NOTHN_FOUND 0x00
+#define NEW_OBJ_DET 0x00
 #define SAME_OBJECT 0x01
 #define EXCE_THRESH 0x02
 
