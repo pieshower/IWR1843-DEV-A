@@ -25,7 +25,7 @@ int targetObject::checkTracked(const detected_object_t &_trackedObject, const de
     if (distance < distanceThreshold && velocity < velocityThreshold) {
         return SAME_OBJECT;
     }
-    else if (distance > distanceThreshold * 4 && distance < distanceThreshold * 30) {
+    else if (distance > distanceThreshold * THRESH_MAX && distance < distanceThreshold * THRESH_MAX) {
         return EXCE_THRESH;
     }
     else {
