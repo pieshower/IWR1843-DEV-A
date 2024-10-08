@@ -4,11 +4,14 @@
 #include "../include/mmWaveRadar.h"
 #include "../include/kalmanFilter.h"
 
-#define NEW_OBJ_DET 0x00
-#define SAME_OBJECT 0x01
-#define EXCE_THRESH 0x02
+#define NEW_OBJ_DET 0
+#define SAME_OBJECT 1
+#define EXCE_THRESH 2
 
-#define VALID_COUNT 0x05
+#define VALID_COUNT 5
+
+#define THRESH_MIN 0x04
+#define THRESH_MAX 0x1E
 
 class targetObject {
 private:
