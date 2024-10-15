@@ -4,7 +4,7 @@ project(radar-tracking)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-cmake_policy(SET CMP0144 NEW)
+#cmake_policy(SET CMP0144 NEW)
 
 find_package(PCL REQUIRED)
 include_directories(${PCL_INCLUDE_DIRS})

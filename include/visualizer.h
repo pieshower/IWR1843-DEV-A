@@ -1,7 +1,6 @@
 #ifndef VISUALIZER_H
 #define VISUALIZER_H
 
-// #include <pcl-1.14/pcl/io/pcd_io.h>
 #include <pcl-1.14/pcl/point_types.h>
 #include <pcl-1.14/pcl/visualization/cloud_viewer.h>
 
