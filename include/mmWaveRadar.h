@@ -1,7 +1,8 @@
-#ifndef mmWaveRadar_H
-#define mmWaveRadar_H
+#ifndef MMWAVERADAR_H
+#define MMWAVERADAR_H
 
 #include <libserial/SerialPort.h>
+#include <pigpio.h>
 
 #include "../include/mmWaveRadar_imp.h"
 

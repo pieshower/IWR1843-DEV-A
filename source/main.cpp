@@ -34,11 +34,9 @@ int main() {
     std::thread track(trackLoop);
     track.detach();
 
-    // while (!visualizer::getVisualizerGuy().hasClosed()) {
-    //     visualizer::getVisualizerGuy().update();
-    // }
-
-    while (true);
+    while (!visualizer::getVisualizerGuy().hasClosed()) {
+        visualizer::getVisualizerGuy().update();
+    }
 
     return 0;
 }
