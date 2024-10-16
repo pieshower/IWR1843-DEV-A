@@ -2,7 +2,7 @@
 #include "../include/mmWaveRadar_imp.h"
 
 const char* chip_s = "/dev/gpiochip0";
-gpiod_chip* chip = gpiod_chip_open(chip_s);
+static gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 servo::servo(int _pin) {
     servoLine = gpiod_chip_get_line(chip, _pin);
