@@ -4,7 +4,6 @@
 #include "../include/iwr1843Config.h"
 
 mmWaveRadar::mmWaveRadar() {
-    // initKalmanVariables();
     connectPort();
 }
 

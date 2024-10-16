@@ -4,6 +4,7 @@
 #include <eigen3/Eigen/Dense>
 #include <iostream>
 #include <unistd.h>
+#include <stdlib.h>
 #include <iomanip>
 #include <thread>
 #include <mutex>

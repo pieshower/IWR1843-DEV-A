@@ -76,8 +76,8 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
             if (checkTracker == SAME_OBJECT) {
                 // std::cout << "same object detected" << std::endl;
                 size_t trackerIndex = &tracker - &trackers[0];
-                std::cout << "  tracker: " << (int)trackerIndex + 1 << std::endl;
-                std::cout << "  tracked: (" << object.x << ", " << object.y << ", " << object.z << ")" << std::endl;
+                // std::cout << "  tracker: " << (int)trackerIndex + 1 << std::endl;
+                // std::cout << "  tracked: (" << object.x << ", " << object.y << ", " << object.z << ")" << std::endl;
                 trackersUpdated[trackerIndex] = true;
                 tracker.trackedObject = object;
                 tracker.kalFil.predict();

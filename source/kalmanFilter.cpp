@@ -63,7 +63,7 @@ void kalmanFilter::predict() {
     X = F * X;
     MatrixXd F_t = F.transpose();
     P = F * P * F_t + Q;
-    std::cout << "predicted: (" << X[0] << ", " << X[1] << ", " << X[2] << ")" << std::endl << std::endl;
+    // std::cout << "predicted: (" << X[0] << ", " << X[1] << ", " << X[2] << ")" << std::endl << std::endl;
     // std::cout << "predict finish" << std::endl;
 }
 
