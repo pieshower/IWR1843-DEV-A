@@ -33,11 +33,11 @@ servo test(22);
 float rad = 0.0;
 
 int main() {
-    std::thread radar(radarLoop);
-    radar.detach();
+    // std::thread radar(radarLoop);
+    // radar.detach();
     
-    std::thread track(trackLoop);
-    track.detach();
+    // std::thread track(trackLoop);
+    // track.detach();
 
     test.setAngle(rad);
 
