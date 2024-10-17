@@ -7,8 +7,9 @@
 
 #define PWM_FRQ 50
 
-#define MIN_DUT 13
-#define MAX_DUT 25
+#define MIN_DUT 1000.0f
+#define OFF_DUT 1500.0f
+#define MAX_DUT 2000.0f
 
 #define MIN_ANG -90.0f
 #define MAX_ANG  90.0f
@@ -21,19 +22,24 @@ private:
     gpiod_line* servoLine;
     std::thread servoThread;
 
-    int frequency = PWM_FRQ;
-    int dutyCylce_us;
+    bool active = false;
+
+    uint period_us;
+    uint dutyCylce_us;
+    uint high_time;
+    uint low_time;
 
     uint8_t servoPin;
     float currentAngle = 0;
 
-    float convertRadsToAngle(float _rads);
+    uint convertRadsToDutyCycle(float &_rads);
+    void pwmController();
 
 public:
-     servo(int _pin);
+     servo(uint _pin, uint _frequency = PWM_FRQ);
     ~servo();
     
-    void setAngle();
+    void setAngle(float &_rads);
 };
 
 #endif

@@ -4,7 +4,7 @@ project(radar-tracking)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#cmake_policy(SET CMP0144 NEW)
+cmake_policy(SET CMP0144 NEW)
 
 # Include Package Manager
 find_package(PkgConfig)
