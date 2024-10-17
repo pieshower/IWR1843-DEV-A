@@ -71,6 +71,6 @@ extern std::mutex mtx;
 
 float PackRGB(uint8_t r, uint8_t g, uint8_t b);
 
-const char* chip_s = "/dev/gpiochip4";
+extern const char* chip_s = "/dev/gpiochip4";
 
 #endif
