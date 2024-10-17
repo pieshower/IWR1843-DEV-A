@@ -39,6 +39,8 @@ int main() {
     // std::thread track(trackLoop);
     // track.detach();
 
+    std::cout << "about to set angle" << std::endl;
+
     test.setAngle(rad);
 
     // while (!visualizer::getVisualizerGuy().hasClosed()) {
