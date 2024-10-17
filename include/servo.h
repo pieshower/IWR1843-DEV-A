@@ -19,7 +19,7 @@
 
 class servo {
 private:
-    gpiod_line* servoLine;
+    struct gpiod_line* servoLine;
     std::thread servoThread;
 
     bool active = false;

@@ -2,7 +2,7 @@
 #include "../include/mmWaveRadar_imp.h"
 
 const char* chip_s = "/dev/gpiochip0";
-static gpiod_chip* chip = gpiod_chip_open(chip_s);
+static struct gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 std::mutex servoMtx;
 
