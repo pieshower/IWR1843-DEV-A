@@ -37,7 +37,7 @@ int main() {
     // std::thread track(trackLoop);
     // track.detach();
 
-    servo test(22);
+    servo test(17);
     
     // test.setAngle(rad);
 
