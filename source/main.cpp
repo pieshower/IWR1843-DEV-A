@@ -28,7 +28,8 @@ void trackLoop() {
     }
 }
 
-float rad = 0.0;
+float rad_s = 0.0;
+float rad_c = 0.0;
 
 int main() {
     // std::thread radar(radarLoop);
@@ -38,7 +39,8 @@ int main() {
     // track.detach();
     
     servo tst(22);
-    servo azm(17);
+    servo elv(17);
+    servo azm(27);
     
     // test.setAngle(rad);
 
@@ -52,9 +54,11 @@ int main() {
         auto now = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed_seconds = now - start;
         double t = elapsed_seconds.count();
-        rad = sin(t);
-        tst.setAngle(rad);
-        azm.setAngle(rad);
+        rad_s = sin(t);
+        rad_c = cos(t);
+        tst.setAngle(rad_s);
+        elv.setAngle(rad_s);
+        azm.setAngle(rad_c);
     }
 
     return 0;
