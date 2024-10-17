@@ -30,6 +30,6 @@ void servo::pwmController() {
 void servo::setAngle(float &_rads) {
     dutyCylce_us = convertRadsToDutyCycle(_rads);
     std::cout << "Duty Cylce: " << dutyCylce_us << std::endl;
-    high_time = (period_us * dutyCylce_us) / 100;
+    high_time = period_us - dutyCylce_us;
     low_time = period_us - high_time;
 }
