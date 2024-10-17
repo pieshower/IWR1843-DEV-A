@@ -32,7 +32,7 @@ add_executable(
     source/mmWaveRadar_imp.cpp
     source/kalmanFilter.cpp
     source/targetObject.cpp
-    source/visualizer.cpp
+    #source/visualizer.cpp
     source/servo.cpp
 )
 
