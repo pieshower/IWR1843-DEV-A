@@ -1,9 +1,7 @@
 #include "../include/servo.h"
 #include "../include/mmWaveRadar_imp.h"
 
-// gpiod_chip* chip = gpiod_chip_open(chip_s);
-
-servo::servo(gpiod_chip *_chip, uint _pin, uint _frequency) {
+servo::servo(uint _pin, uint _frequency, gpiod_chip *_chip) {
     servoPin = _pin;
     servoLine = gpiod_chip_get_line(_chip, servoPin);
     period_us = 1000000 / _frequency;
