@@ -36,8 +36,9 @@ int main() {
     
     // std::thread track(trackLoop);
     // track.detach();
-
-    servo test(17);
+    
+    servo tst(22);
+    servo azm(17);
     
     // test.setAngle(rad);
 
@@ -52,7 +53,8 @@ int main() {
         std::chrono::duration<double> elapsed_seconds = now - start;
         double t = elapsed_seconds.count();
         rad = sin(t);
-        test.setAngle(rad);
+        tst.setAngle(rad);
+        azm.setAngle(rad);
     }
 
     return 0;
