@@ -1,10 +1,7 @@
 #include "../include/servo.h"
 #include "../include/mmWaveRadar_imp.h"
 
-// const char* chip_s = "/dev/gpiochip4";
-// struct gpiod_chip* chip = gpiod_chip_open(chip_s);
-
-servo::servo(struct gpiod_chip *_chip, uint _pin, uint _frequency) {
+servo::servo(gpiod_chip *_chip, uint _pin, uint _frequency) {
     servoPin = _pin;
     if (!_chip) {
         std::cerr << "Failed to open GPIO chip\n";

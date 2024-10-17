@@ -19,7 +19,7 @@
 
 class servo {
 private:
-    struct gpiod_line* servoLine;
+    gpiod_line* servoLine;
     std::thread servoThread;
 
     bool active = false;
@@ -36,7 +36,7 @@ private:
     void pwmController();
 
 public:
-     servo(struct gpiod_chip *_chip, uint _pin, uint _frequency = PWM_FRQ);
+     servo(gpiod_chip *_chip, uint _pin, uint _frequency = PWM_FRQ);
     ~servo();
     
     void setAngle(float &_rads);

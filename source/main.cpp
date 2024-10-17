@@ -40,7 +40,7 @@ int main() {
     // std::thread track(trackLoop);
     // track.detach();
 
-    struct gpiod_chip* chip = gpiod_chip_open(chip_s);
+    gpiod_chip* chip = gpiod_chip_open(chip_s);
 
     servo test(chip, 22);
     
