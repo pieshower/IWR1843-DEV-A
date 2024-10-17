@@ -45,7 +45,15 @@ int main() {
     //     visualizer::getVisualizerGuy().update();
     // }
 
-    while (true);
+     auto start = std::chrono::high_resolution_clock::now();
+
+    while (true) {
+        auto now = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed_seconds = now - start;
+        double t = elapsed_seconds.count();
+        rad = sin(t);
+        test.setAngle(rad);
+    }
 
     return 0;
 }

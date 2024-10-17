@@ -11,9 +11,6 @@
 #define OFF_DUT 1500.0f
 #define MAX_DUT 2000.0f
 
-#define MIN_ANG -90.0f
-#define MAX_ANG  90.0f
-
 #define MIN_RAD -1.0f
 #define MAX_RAD  1.0f
 
@@ -29,8 +26,8 @@ private:
 
     uint period_us;
     uint dutyCylce_us;
-    uint high_time = 18500;
-    uint low_time = 1500;
+    uint high_time = 1500;
+    uint low_time = 18500;
 
     uint8_t servoPin;
     float currentAngle = 0;
