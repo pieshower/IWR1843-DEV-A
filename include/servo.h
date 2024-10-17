@@ -17,7 +17,7 @@
 #define MIN_RAD -1.0f
 #define MAX_RAD  1.0f
 
-static const char* chip_s = "/dev/gpiochip4";
+static const char* chip_s = "/dev/gpiochip0";
 static gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 class servo {
