@@ -3,7 +3,7 @@
 
 #include <gpiod.h>
 
-#include "../include/mmWaveRadar.h"
+#include "../include/mmWaveRadar_imp.h"
 
 #define PWM_FRQ 50
 
@@ -19,6 +19,10 @@
 class servo {
 private:
     gpiod_line* servoLine;
+    std::thread servoThread;
+
+    int frequency = PWM_FRQ;
+    int dutyCylce_us;
 
     uint8_t servoPin;
     float currentAngle = 0;
