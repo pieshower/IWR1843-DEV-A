@@ -3,6 +3,8 @@
 // #include "../include/visualizer.h"
 #include "../include/servo.h"
 
+const char* chip_s = "/dev/gpiochip4";
+
 void radarLoop() {
     mmWaveRadar::getRadarGuy().start();
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -28,7 +30,6 @@ void trackLoop() {
     }
 }
 
-servo test(22);
 
 float rad = 0.0;
 
@@ -39,6 +40,10 @@ int main() {
     // std::thread track(trackLoop);
     // track.detach();
 
+    struct gpiod_chip* chip = gpiod_chip_open(chip_s);
+
+    servo test(chip, 22);
+    
     std::cout << "about to set angle" << std::endl;
 
     test.setAngle(rad);

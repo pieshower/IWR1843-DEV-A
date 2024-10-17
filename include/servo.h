@@ -36,7 +36,7 @@ private:
     void pwmController();
 
 public:
-     servo(uint _pin, uint _frequency = PWM_FRQ);
+     servo(struct gpiod_chip *_chip, uint _pin, uint _frequency = PWM_FRQ);
     ~servo();
     
     void setAngle(float &_rads);

@@ -1,16 +1,16 @@
 #include "../include/servo.h"
 #include "../include/mmWaveRadar_imp.h"
 
-const char* chip_s = "/dev/gpiochip4";
-struct gpiod_chip* chip = gpiod_chip_open(chip_s);
+// const char* chip_s = "/dev/gpiochip4";
+// struct gpiod_chip* chip = gpiod_chip_open(chip_s);
 
-servo::servo(uint _pin, uint _frequency) {
+servo::servo(struct gpiod_chip *_chip, uint _pin, uint _frequency) {
     servoPin = _pin;
-    if (!chip) {
+    if (!_chip) {
         std::cerr << "Failed to open GPIO chip\n";
         std::exit(EXIT_FAILURE);  // Or handle error appropriately
     }
-    servoLine = gpiod_chip_get_line(chip, servoPin);
+    servoLine = gpiod_chip_get_line(_chip, servoPin);
     period_us = 1000000 / _frequency;
     active = true;
     servoThread = std::thread([this](){this->pwmController();});
