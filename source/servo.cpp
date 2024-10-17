@@ -4,7 +4,15 @@
 servo::servo(uint _pin, uint _frequency, gpiod_chip *_chip) {
     servoPin = _pin;
     servoLine = gpiod_chip_get_line(_chip, servoPin);
-    gpiod_line_request_output(servoLine, "servo", 0);
+    
+    if (!servoLine) {
+        std::cerr << "Failed to get GPIO line" << std::endl;
+    }
+
+    if (gpiod_line_request_output(servoLine, "servo", 0) == -1) {
+        std::cerr << "Failed to set GPIO line to output" << std::endl;
+    }
+
     period_us = 1000000 / _frequency;
     active = true;
     servoThread = std::thread([this](){this->pwmController();});
@@ -21,17 +29,9 @@ uint servo::convertRadsToDutyCycle(float &_rads) {
 
 void servo::pwmController() {
     while (active) {
-        // gpiod_line_set_value(servoLine, 1);
-        if (gpiod_line_set_value(servoLine, 1) == -1) {
-            std::cerr << "Failed to set GPIO line high\n";
-        }
-        // std::this_thread::sleep_for(std::chrono::microseconds(high_time));
+        gpiod_line_set_value(servoLine, 1);
         usleep(high_time);
-        // gpiod_line_set_value(servoLine, 0);
-        if (gpiod_line_set_value(servoLine, 0) == -1) {
-            std::cerr << "Failed to set GPIO line high\n";
-        }
-        // std::this_thread::sleep_for(std::chrono::microseconds(low_time));
+        gpiod_line_set_value(servoLine, 0);
         usleep(low_time);
     }
 }
