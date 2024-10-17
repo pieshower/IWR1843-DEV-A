@@ -3,10 +3,6 @@
 
 servo::servo(gpiod_chip *_chip, uint _pin, uint _frequency) {
     servoPin = _pin;
-    if (!_chip) {
-        std::cerr << "Failed to open GPIO chip\n";
-        std::exit(EXIT_FAILURE);  // Or handle error appropriately
-    }
     servoLine = gpiod_chip_get_line(_chip, servoPin);
     period_us = 1000000 / _frequency;
     active = true;
@@ -24,18 +20,16 @@ uint servo::convertRadsToDutyCycle(float &_rads) {
 
 void servo::pwmController() {
     while (active) {
-        if (mtx.try_lock()) {
-            gpiod_line_set_value(servoLine, 1);
-            std::this_thread::sleep_for(std::chrono::microseconds(high_time));
-            gpiod_line_set_value(servoLine, 0);
-            std::this_thread::sleep_for(std::chrono::microseconds(low_time));
-            mtx.unlock();
-        }
+        gpiod_line_set_value(servoLine, 1);
+        std::this_thread::sleep_for(std::chrono::microseconds(high_time));
+        gpiod_line_set_value(servoLine, 0);
+        std::this_thread::sleep_for(std::chrono::microseconds(low_time));
     }
 }
 
 void servo::setAngle(float &_rads) {
     dutyCylce_us = convertRadsToDutyCycle(_rads);
+    std::cout << "Duty Cylce: " << dutyCylce_us << std::endl;
     high_time = (period_us * dutyCylce_us) / 100;
     low_time = period_us - high_time;
 }
