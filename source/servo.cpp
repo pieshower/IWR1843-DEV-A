@@ -2,9 +2,7 @@
 #include "../include/mmWaveRadar_imp.h"
 
 const char* chip_s = "/dev/gpiochip0";
-static struct gpiod_chip* chip = gpiod_chip_open(chip_s);
-
-std::mutex servoMtx;
+struct gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 servo::servo(uint _pin, uint _frequency) {
     servoPin = _pin;
