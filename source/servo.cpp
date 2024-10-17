@@ -4,6 +4,7 @@
 servo::servo(uint _pin, uint _frequency, gpiod_chip *_chip) {
     servoPin = _pin;
     servoLine = gpiod_chip_get_line(_chip, servoPin);
+    gpiod_line_request_output(servoLine, "servo", 0);
     period_us = 1000000 / _frequency;
     active = true;
     servoThread = std::thread([this](){this->pwmController();});
