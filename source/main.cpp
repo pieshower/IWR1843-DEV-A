@@ -39,7 +39,7 @@ int main() {
 
     servo test(22);
     
-    test.setAngle(rad);
+    // test.setAngle(rad);
 
     // while (!visualizer::getVisualizerGuy().hasClosed()) {
     //     visualizer::getVisualizerGuy().update();

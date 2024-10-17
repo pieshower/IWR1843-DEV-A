@@ -29,8 +29,8 @@ private:
 
     uint period_us;
     uint dutyCylce_us;
-    uint high_time = 2000;
-    uint low_time = 18000;
+    uint high_time = 18500;
+    uint low_time = 1500;
 
     uint8_t servoPin;
     float currentAngle = 0;
