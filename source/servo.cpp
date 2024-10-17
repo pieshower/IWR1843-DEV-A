@@ -1,7 +1,7 @@
 #include "../include/servo.h"
 #include "../include/mmWaveRadar_imp.h"
 
-const char* chip_s = "/dev/gpiochip0";
+const char* chip_s = "/dev/gpiochip4";
 struct gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 servo::servo(uint _pin, uint _frequency) {
