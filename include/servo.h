@@ -17,6 +17,9 @@
 #define MIN_RAD -1.0f
 #define MAX_RAD  1.0f
 
+static const char* chip_s = "/dev/gpiochip4";
+static gpiod_chip* chip = gpiod_chip_open(chip_s);
+
 class servo {
 private:
     gpiod_line* servoLine;
@@ -41,8 +44,5 @@ public:
     
     void setAngle(float &_rads);
 };
-
-static const char* chip_s = "/dev/gpiochip4";
-static gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 #endif
