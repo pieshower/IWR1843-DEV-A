@@ -42,6 +42,7 @@ public:
     void setAngle(float &_rads);
 };
 
+static const char* chip_s = "/dev/gpiochip4";
 static gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 #endif
