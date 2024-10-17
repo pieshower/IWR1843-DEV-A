@@ -42,6 +42,4 @@ public:
     void setAngle(float &_rads);
 };
 
-static gpiod_chip* chip = gpiod_chip_open(chip_s);
-
 #endif
