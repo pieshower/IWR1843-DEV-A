@@ -20,10 +20,16 @@ uint servo::convertRadsToDutyCycle(float &_rads) {
 
 void servo::pwmController() {
     while (active) {
-        gpiod_line_set_value(servoLine, 1);
+        // gpiod_line_set_value(servoLine, 1);
+        if (gpiod_line_set_value(servoLine, 1) == -1) {
+            std::cerr << "Failed to set GPIO line high\n";
+        }
         // std::this_thread::sleep_for(std::chrono::microseconds(high_time));
         usleep(high_time);
-        gpiod_line_set_value(servoLine, 0);
+        // gpiod_line_set_value(servoLine, 0);
+        if (gpiod_line_set_value(servoLine, 0) == -1) {
+            std::cerr << "Failed to set GPIO line high\n";
+        }
         // std::this_thread::sleep_for(std::chrono::microseconds(low_time));
         usleep(low_time);
     }
