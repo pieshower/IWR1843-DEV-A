@@ -4,6 +4,8 @@
 const char* chip_s = "/dev/gpiochip0";
 static gpiod_chip* chip = gpiod_chip_open(chip_s);
 
+std::mutex servoMtx;
+
 servo::servo(uint _pin, uint _frequency) {
     servoPin = _pin;
     servoLine = gpiod_chip_get_line(chip, servoPin);
@@ -23,10 +25,13 @@ uint servo::convertRadsToDutyCycle(float &_rads) {
 
 void servo::pwmController() {
     while (active) {
-        gpiod_line_set_value(servoLine, 1);
-        std::this_thread::sleep_for(std::chrono::microseconds(high_time));
-        gpiod_line_set_value(servoLine, 0);
-        std::this_thread::sleep_for(std::chrono::microseconds(low_time));
+        if (mtx.try_lock()) {
+            gpiod_line_set_value(servoLine, 1);
+            std::this_thread::sleep_for(std::chrono::microseconds(high_time));
+            gpiod_line_set_value(servoLine, 0);
+            std::this_thread::sleep_for(std::chrono::microseconds(low_time));
+            mtx.unlock();
+        }
     }
 }
 
