@@ -6,6 +6,10 @@ struct gpiod_chip* chip = gpiod_chip_open(chip_s);
 
 servo::servo(uint _pin, uint _frequency) {
     servoPin = _pin;
+    if (!chip) {
+        std::cerr << "Failed to open GPIO chip\n";
+        std::exit(EXIT_FAILURE);  // Or handle error appropriately
+    }
     servoLine = gpiod_chip_get_line(chip, servoPin);
     period_us = 1000000 / _frequency;
     active = true;
