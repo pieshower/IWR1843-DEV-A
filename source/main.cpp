@@ -54,8 +54,8 @@ int main() {
         auto now = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> elapsed_seconds = now - start;
         double t = elapsed_seconds.count();
-        rad_s = sin(t);
-        rad_c = cos(t);
+        rad_s = sin(0.5 * t);
+        rad_c = cos(0.5 * t);
         tst.setAngle(rad_s);
         // elv.setAngle(rad_s);
         azm.setAngle(rad_c);
