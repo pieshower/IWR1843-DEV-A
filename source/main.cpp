@@ -1,7 +1,8 @@
 #include "../include/mmWaveRadar.h"
 #include "../include/targetObject.h"
-// #include "../include/visualizer.h"
 #include "../include/servo.h"
+
+// #include "../include/visualizer.h"
 
 void radarLoop() {
     mmWaveRadar::getRadarGuy().start();
