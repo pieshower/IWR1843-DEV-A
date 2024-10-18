@@ -200,7 +200,6 @@ void mmWaveRadar::convertToVector(detected_object_t &_detectedObject) {
     float vy = velocity * (y / rho);
     float vz = velocity * (z / rho);
 
-
     float theta = atan2(y, x);
     float phi = acos(std::clamp(z / rho, -1.0f, 1.0f));
     float rho_dot_p = (x * vx + y * vy + z * vz) / rho;

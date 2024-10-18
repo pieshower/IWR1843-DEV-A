@@ -74,5 +74,4 @@ float PackRGB(uint8_t r, uint8_t g, uint8_t b);
 static const char* chip_s = "/dev/gpiochip0";
 static gpiod_chip* chip = gpiod_chip_open(chip_s);
 
-
 #endif
