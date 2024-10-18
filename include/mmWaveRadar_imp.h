@@ -72,6 +72,6 @@ extern std::mutex mtx;
 
 float PackRGB(uint8_t r, uint8_t g, uint8_t b);
 
-static gpiod_chip* chip = gpiod_chip_open("/dev/gpiochip0");
+static gpiod_chip* chip;
 
 #endif
