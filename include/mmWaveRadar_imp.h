@@ -5,6 +5,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <stdlib.h>
+#include <gpiod.h>
 #include <iomanip>
 #include <thread>
 #include <mutex>
@@ -70,5 +71,7 @@ extern data_complete_t dataComplete;
 extern std::mutex mtx;
 
 float PackRGB(uint8_t r, uint8_t g, uint8_t b);
+
+static gpiod_chip* chip = gpiod_chip_open("/dev/gpiochip0");
 
 #endif

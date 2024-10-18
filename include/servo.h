@@ -1,8 +1,6 @@
 #ifndef SERVO_H
 #define SERVO_H
 
-#include <gpiod.h>
-
 #include "../include/mmWaveRadar_imp.h"
 
 #define PWM_FRQ 50
@@ -11,11 +9,10 @@
 #define OFF_DUT 1500.0f
 #define MAX_DUT 2000.0f
 
-#define MIN_RAD -1.0f
-#define MAX_RAD  1.0f
+#define PI 3.14159265
 
-static const char* chip_s = "/dev/gpiochip0";
-static gpiod_chip* chip = gpiod_chip_open(chip_s);
+#define MIN_RAD 0.0f
+#define MAX_RAD -PI
 
 class servo {
 private:
