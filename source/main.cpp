@@ -39,7 +39,7 @@ int main() {
     // track.detach();
     
     servo tst(22);
-    servo elv(17);
+    // servo elv(17);
     servo azm(27);
     
     // test.setAngle(rad);
@@ -48,7 +48,7 @@ int main() {
     //     visualizer::getVisualizerGuy().update();
     // }
 
-     auto start = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
     while (true) {
         auto now = std::chrono::high_resolution_clock::now();
@@ -57,7 +57,7 @@ int main() {
         rad_s = sin(t);
         rad_c = cos(t);
         tst.setAngle(rad_s);
-        elv.setAngle(rad_s);
+        // elv.setAngle(rad_s);
         azm.setAngle(rad_c);
     }
 

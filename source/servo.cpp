@@ -1,5 +1,4 @@
 #include "../include/servo.h"
-#include "../include/mmWaveRadar_imp.h"
 
 servo::servo(uint _pin, uint _frequency, gpiod_chip *_chip) {
     servoPin = _pin;
@@ -38,7 +37,6 @@ void servo::pwmController() {
 
 void servo::setAngle(float &_rads) {
     dutyCylce_us = convertRadsToDutyCycle(_rads);
-    std::cout << "Duty Cylce: " << dutyCylce_us << "\r";
     low_time = period_us - dutyCylce_us;
     high_time = period_us - low_time;
 }
