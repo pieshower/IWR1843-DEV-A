@@ -131,6 +131,6 @@ void kalmanFilter::update(const VectorXd &z) {
 
     // std::cout << "update finished" << std::endl;
 
-    // elv.setAngle(theta);
-    // azm.setAngle(phi);
+    elv.setAngle(theta);
+    azm.setAngle(phi);
 }
