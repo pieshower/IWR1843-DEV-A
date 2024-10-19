@@ -39,7 +39,7 @@ public:
     void setAngle(float &_rads);
 };
 
-extern servo azm(22);
-extern servo elv(17);
+extern servo azm;
+extern servo elv;
 
 #endif
