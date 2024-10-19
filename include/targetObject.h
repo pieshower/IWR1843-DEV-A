@@ -21,7 +21,7 @@ private:
     uint8_t isValidCounter = VALID_COUNT;
 
     float distanceThreshold = 0.05;
-    float velocityThreshold = 3.00;
+    float velocityThreshold = 0.20;
 
     int checkTracked(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
