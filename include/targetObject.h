@@ -11,7 +11,7 @@
 #define VALID_COUNT 03
 
 #define THRESH_MIN 04
-#define THRESH_MAX 30
+#define THRESH_MAX 50
 
 class targetObject {
 private:
