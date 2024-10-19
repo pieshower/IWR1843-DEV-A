@@ -11,8 +11,8 @@
 
 #define PI 3.14159265
 
-#define MIN_RAD -1.0f
-#define MAX_RAD  1.0f
+#define MIN_RAD -PI
+#define MAX_RAD  PI
 
 class servo {
 private:
@@ -38,5 +38,8 @@ public:
     
     void setAngle(float &_rads);
 };
+
+servo azm(27);
+servo elv(22);
 
 #endif

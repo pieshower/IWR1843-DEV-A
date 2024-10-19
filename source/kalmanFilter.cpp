@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../include/kalmanFilter.h"
+#include "../include/servo.h"
 
 #define PI 3.14159265
 
@@ -126,4 +127,7 @@ void kalmanFilter::update(const VectorXd &z) {
     P = (I - K * H) * P;
 
     // std::cout << "update finished" << std::endl;
+
+    elv.setAngle(theta);
+    azm.setAngle(phi);
 }
