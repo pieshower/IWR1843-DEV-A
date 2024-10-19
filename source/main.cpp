@@ -56,7 +56,7 @@ int main() {
     //     azm.setAngle(rad_c);
     // }
 
-    // while (true);
+    while (true);
 
     return 0;
 }
