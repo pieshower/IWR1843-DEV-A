@@ -5,7 +5,6 @@
 
 mmWaveRadar::mmWaveRadar() {
     connectPort();
-    // chip = gpiod_chip_open("/dev/gpiochip0");
 }
 
 void mmWaveRadar::configure(const char* configCommands[], const unsigned long configSize) {

@@ -11,8 +11,8 @@
 
 #define PI 3.14159265
 
-#define MIN_RAD 0.0f
-#define MAX_RAD -PI
+#define MIN_RAD -1.0f
+#define MAX_RAD  1.0f
 
 class servo {
 private:
