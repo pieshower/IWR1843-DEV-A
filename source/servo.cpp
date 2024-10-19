@@ -1,5 +1,8 @@
 #include "../include/servo.h"
 
+servo azm(22);
+servo elv(17);
+
 servo::servo(uint _pin, uint _frequency, gpiod_chip *_chip) {
     servoPin = _pin;
     servoLine = gpiod_chip_get_line(_chip, servoPin);
