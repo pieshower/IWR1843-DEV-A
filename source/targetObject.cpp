@@ -107,7 +107,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
     std::cout << "    theta: " << theta << std::endl;
     std::cout << "      phi: " <<   phi << std::endl << std::endl; 
 
-    elv.setAngle(theta);
+    // elv.setAngle(theta);
     azm.setAngle(phi);
 }
 
