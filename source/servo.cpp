@@ -1,7 +1,7 @@
 #include "../include/servo.h"
 
 servo azm(22);
-// servo elv(17);
+servo elv(17);
 
 servo::servo(uint _pin, uint _frequency, gpiod_chip *_chip) {
     servoPin = _pin;

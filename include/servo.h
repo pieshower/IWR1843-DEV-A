@@ -40,6 +40,6 @@ public:
 };
 
 extern servo azm;
-// extern servo elv;
+extern servo elv;
 
 #endif
