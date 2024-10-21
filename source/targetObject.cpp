@@ -101,10 +101,13 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
     removeStaleTrackers(trackersUpdated);
 
     float theta = trackers[0].trackedObject.spherVector[1];
-    float azimuth = trackers[0].trackedObject.spherVector[2];
+    float phi = trackers[0].trackedObject.spherVector[2];
+
+    std::cout << "    theta: " << theta << std::endl;
+    std::cout << "      phi: " <<   phi << std::endl << std::endl; 
 
     elv.setAngle(theta);
-    azm.setAngle(azimuth);
+    azm.setAngle(phi);
 }
 
 detected_object_t& targetObject::getObjectTargeted() {
