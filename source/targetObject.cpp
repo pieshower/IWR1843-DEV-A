@@ -77,7 +77,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
             if (checkTracker == SAME_OBJECT) {
                 // std::cout << "same object detected" << std::endl;
                 size_t trackerIndex = &tracker - &trackers[0];
-                std::cout << "  tracker: " << (int)trackerIndex + 1 << std::endl;
+                // std::cout << "  tracker: " << (int)trackerIndex + 1 << std::endl;
                 // std::cout << "  tracked: (" << object.x << ", " << object.y << ", " << object.z << ")" << std::endl;
                 trackersUpdated[trackerIndex] = true;
                 tracker.trackedObject = object;
@@ -103,6 +103,7 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
     float theta = trackers[0].trackedObject.spherVector[1];
     float phi = trackers[0].trackedObject.spherVector[2];
 
+    std::cout << "  tracker: " << 1 << std::endl;
     std::cout << "    theta: " << theta << std::endl;
     std::cout << "      phi: " <<   phi << std::endl << std::endl; 
 
