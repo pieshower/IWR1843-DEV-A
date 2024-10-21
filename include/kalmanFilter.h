@@ -18,6 +18,8 @@ private:
     MatrixXd H = MatrixXd(MEASR_DIM, STATE_DIM); // measurement matrix
     MatrixXd R = MatrixXd(MEASR_DIM, MEASR_DIM); // measurement covariance matrix
 
+    VectorXd y = VectorXd(STATE_DIM);
+
     void initKalmanVariables();
     void init(const VectorXd &X_in);
 

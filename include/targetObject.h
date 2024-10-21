@@ -11,7 +11,7 @@
 #define VALID_COUNT 03
 
 #define THRESH_MIN 04
-#define THRESH_MAX 50
+#define THRESH_MAX 30
 
 class targetObject {
 private:
@@ -21,7 +21,7 @@ private:
     uint8_t isValidCounter = VALID_COUNT;
 
     float distanceThreshold = 0.05;
-    float velocityThreshold = 0.20;
+    float velocityThreshold = 3.00;
 
     int checkTracked(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);
     float calculateDistance(const detected_object_t &_trackedObject, const detected_object_t &_detectedObject);

@@ -94,7 +94,7 @@ void kalmanFilter::update(const VectorXd &z) {
     z_pred << rho, theta, phi, rho_dot_p;
 
     // Measurement residual (difference between actual and predicted)
-    VectorXd y = z - z_pred;
+    y = z - z_pred;
 
     // Normalize angles to ensure they are within [-PI, PI]
     if (y(1) > PI) {
@@ -130,7 +130,4 @@ void kalmanFilter::update(const VectorXd &z) {
     P = (I - K * H) * P;
 
     // std::cout << "update finished" << std::endl;
-
-    elv.setAngle(theta);
-    azm.setAngle(phi);
 }
