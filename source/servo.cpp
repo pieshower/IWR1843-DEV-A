@@ -18,6 +18,7 @@ servo::servo(uint _pin, uint _frequency, gpiod_chip *_chip) {
     period_us = 1000000 / _frequency;
     active = true;
     servoThread = std::thread([this](){this->pwmController();});
+    servoThread.join();
 }
 
 servo::~servo() {
