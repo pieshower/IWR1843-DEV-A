@@ -1,6 +1,8 @@
 #ifndef SERVO_H
 #define SERVO_H
 
+#include <gpiod.h>
+
 #include "../include/mmWaveRadar_imp.h"
 
 #define PWM_FRQ 50

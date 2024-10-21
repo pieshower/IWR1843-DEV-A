@@ -1,5 +1,3 @@
-#include <gpiod.h>
-
 #include "../include/mmWaveRadar_imp.h"
 
 data_header_t dataHeader;
