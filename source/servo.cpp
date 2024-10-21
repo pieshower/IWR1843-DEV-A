@@ -37,9 +37,11 @@ uint servo::convertRadsToDutyCycle(float &_rads) {
 void servo::pwmController() {
     while (active) {
         gpiod_line_set_value(servoLine, 1);
-        std::this_thread::sleep_for(std::chrono::microseconds(high_time));
+        // std::this_thread::sleep_for(std::chrono::microseconds(high_time));
+        usleep(high_time);
         gpiod_line_set_value(servoLine, 0);
-        std::this_thread::sleep_for(std::chrono::microseconds(low_time));
+        // std::this_thread::sleep_for(std::chrono::microseconds(low_time));
+        usleep(low_time);
     }
 }
 
