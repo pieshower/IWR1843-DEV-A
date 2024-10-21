@@ -10,6 +10,8 @@ data_complete_t dataComplete;
 
 std::mutex mtx;
 
+gpiod_chip* chip = gpiod_chip_open("/dev/gpiochip0");
+
 float PackRGB(uint8_t r, uint8_t g, uint8_t b) {
   uint32_t color_uint = ((uint32_t)r << 16 | (uint32_t) g << 8 | (uint32_t)b);
   return *reinterpret_cast<float*>(&color_uint);
