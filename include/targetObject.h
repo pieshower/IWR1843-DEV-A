@@ -8,10 +8,10 @@
 #define SAME_OBJECT 01
 #define EXCE_THRESH 02
 
-#define VALID_COUNT 03
+#define VALID_COUNT 05
 
 #define THRESH_MIN 04
-#define THRESH_MAX 30
+#define THRESH_MAX 40
 
 class targetObject {
 private:
