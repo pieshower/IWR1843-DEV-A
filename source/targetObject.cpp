@@ -1,4 +1,5 @@
 #include "../include/targetObject.h"
+#include "../include/servo.h"
 
 std::vector<targetObject> trackers(1);
 
@@ -98,6 +99,12 @@ void targetObject::processDetectedObjects(const std::vector<detected_object_t> &
         }
     }
     removeStaleTrackers(trackersUpdated);
+
+    float theta = trackers[0].trackedObject.spherVector[1];
+    float azimuth = trackers[0].trackedObject.spherVector[2];
+
+    elv.setAngle(theta);
+    azm.setAngle(azimuth);
 }
 
 detected_object_t& targetObject::getObjectTargeted() {
